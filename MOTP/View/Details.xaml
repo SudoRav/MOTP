@@ -1,0 +1,76 @@
+﻿<Window x:Class="MOTP.View.Details"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:MOTP.ViewModel"
+        xmlns:Menu="clr-namespace:MOTP.Utilities"
+        mc:Ignorable="d"
+        Title="Детали"
+        Height="200"
+        Width="900"
+        
+        Background="#212529" Closed="Window_Closed">
+    <!--WindowStartupLocation="CenterScreen"-->
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            
+            <RowDefinition/>
+
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <TextBox x:Name="TB_Count" 
+                 Style="{DynamicResource TextBoxApp}" 
+                 Width="NaN" Margin="10,0,10,0" 
+                 ToolTip="Количетво посылок" Height="30" HorizontalAlignment="Stretch" Loaded="TBcount_Loaded" Grid.Column="2" KeyDown="TBcount_KeyDown" MouseDoubleClick="TB_Count_MouseDoubleClick"/>
+
+        <TextBox x:Name="TB_Info" 
+            Style="{DynamicResource TextBoxApp}" 
+            Width="NaN" Margin="10,0,10,0" 
+            ToolTip="Наклейка и пломба" Height="30" HorizontalAlignment="Stretch" Loaded="TBcount_Loaded" Grid.Column="1" MouseDoubleClick="TB_Info_MouseDoubleClick" KeyDown="TB_Info_KeyDown"/>
+
+        <TextBox x:Name="TB_Prim" 
+            Style="{DynamicResource TextBoxApp}" 
+            Width="NaN" Margin="10,0,10,0" 
+            ToolTip="Тип" Height="30" HorizontalAlignment="Stretch" KeyDown="TB_Prim_KeyDown" MouseDoubleClick="TB_Prim_MouseDoubleClick"/>
+
+        <TextBox x:Name="TBo_Com" 
+            Style="{DynamicResource TextBoxApp}" 
+            Width="NaN" Margin="10,0,10,0" 
+            Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+            ToolTip="Тип" Height="30" HorizontalAlignment="Stretch" Loaded="TBo_Com_Loaded" LostFocus="TBo_Com_LostFocus"/>
+
+        <Button x:Name="BTSetKol"
+                Style="{StaticResource BtnApp}"
+                Content="Сохранить"
+                Margin="10,0,45,0" 
+                Width="NaN" 
+                Height="36" Grid.Row="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" Click="BTSetKol_Click" />
+
+        <Button x:Name="Del"
+                Style="{StaticResource BtnApp}"
+                Content="Удалить"
+                Margin="45,0,10,0" 
+                Width="NaN" 
+                Height="36" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" Click="Del_Click" />
+
+        <Button x:Name="BTweb"
+            Style="{StaticResource BtnApp}"
+            Content="Открыть в браузере"
+            Margin="10,0,45,0" 
+            Width="NaN" 
+            Height="36" Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Center" Click="BTweb_Click" />
+
+    </Grid>
+</Window>

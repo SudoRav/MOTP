@@ -1,0 +1,63 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:MOTP.ViewModel"
+                    xmlns:view="clr-namespace:MOTP.View"
+                    xmlns:views="clr-namespace:MOTP.View.Stations">
+
+    <DataTemplate DataType="{x:Type vm:HomeVM}">
+        <view:Home />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:HimkiVM}">
+        <views:Himki/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:MartaVM}">
+        <views:Marta />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:PuhkinoVM}">
+        <views:Puhkino />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:PrivolnayVM}">
+        <views:Privolnay />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:VehkiVM}">
+        <views:Vehki />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:RybinovayVM}">
+        <views:Rybinovay />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:SharapovoVM}">
+        <view:Sharapovo />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:HelkovskayVM}">
+        <views:Helkovskay />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:OdincovoVM}">
+        <views:Odincovo />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:SkladohnayVM}">
+        <views:Skladohnay />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:PerervaVM}">
+        <views:Pererva />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:BUhunskayVM}">
+        <views:BUhunskay />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:EgorevskVM}">
+        <views:Egorevsk />
+    </DataTemplate>
+
+</ResourceDictionary>
