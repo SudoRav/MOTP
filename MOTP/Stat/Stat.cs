@@ -5,7 +5,7 @@ namespace Stat
 {
     public static class Settings
     {
-        public static string Dol = "";
+        public static string Dol = "";1
         public static string FIO = "";
 
         public static string timePRB = "";
