@@ -232,7 +232,8 @@
                    Grid.Row="2" 
                    Margin="10,0,54,0" 
                    Opacity="0.5" 
-                   TextAlignment="Right" Loaded="TBO_Pal_Loaded"/>
+                   TextAlignment="Right" 
+                   Loaded="TBO_Pal_Loaded"/>
 
         <TextBlock x:Name="TBO_GM"
            Text="0 / 0"

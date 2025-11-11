@@ -104,7 +104,7 @@
     <Setting Name="ComBUhunskay" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="ComEgorevsk" Type="System.String" Scope="User">
+    <Setting Name="ComBUhunskay" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

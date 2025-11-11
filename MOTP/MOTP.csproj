@@ -3,8 +3,8 @@
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <LangVersion>preview</LangVersion>
-  </PropertyGroup>  
-<PropertyGroup>
+  </PropertyGroup>
+  <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{795E279B-9B2D-4613-BC8A-2B309B885D1A}</ProjectGuid>
@@ -165,6 +165,10 @@
     <Compile Include="View\Stations\Vehki.xaml.cs">
       <DependentUpon>Vehki.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\StationView.xaml.cs">
+      <DependentUpon>StationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\StationViewModel.cs" />
     <Page Include="Auth.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -278,6 +282,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Stations\Vehki.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\StationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

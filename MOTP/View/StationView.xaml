@@ -1,0 +1,450 @@
+﻿<UserControl x:Class="MOTP.View.StationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MOTP.View"
+             xmlns:obs="clr-namespace:MOTP.Utilities"
+             xmlns:viewmodel="clr-namespace:MOTP.ViewModel"
+             mc:Ignorable="d"
+             d:DesignHeight="600"
+             d:DesignWidth="1400"
+             Style="{StaticResource Page_Style}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="30"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Buttons -->
+        <Button x:Name="BTN_Form"
+                Command="{Binding OpenFormCommand}"
+                Style="{StaticResource BtnApp}"
+                FontSize="22"
+                Content="Форма"
+                Width="NaN"
+                HorizontalAlignment="Stretch"
+                Height="36"
+                Grid.Row="5"
+                Grid.Column="2"
+                Grid.ColumnSpan="2"
+                Margin="10,4,10,0"/>
+
+        <Button x:Name="BTN_Otch"
+                Command="{Binding GenerateReportCommand}"
+                Style="{StaticResource BtnApp}"
+                FontSize="22"
+                Content="Отчёт"
+                Width="NaN"
+                HorizontalAlignment="Stretch"
+                Height="36"
+                Grid.Row="5"
+                Grid.ColumnSpan="2"
+                Margin="10,4,10,0"/>
+
+        <Button x:Name="BTN_Sett"
+                Command="{Binding OpenSettingsCommand}"
+                Style="{StaticResource BtnApp}"
+                FontSize="18"
+                Content="⚙"
+                Width="NaN"
+                HorizontalAlignment="Stretch"
+                Height="36"
+                Grid.Row="5"
+                Grid.Column="4"
+                Margin="0,4,0,0"/>
+
+        <Button x:Name="BTN_Add"
+                Command="{Binding AddCommand}"
+                Style="{StaticResource BtnApp}"
+                FontSize="14"
+                Content="Добавить"
+                Width="NaN"
+                HorizontalAlignment="Stretch"
+                Height="25"
+                Grid.Row="1"
+                Margin="10,0,10,0"/>
+
+        <Button x:Name="BTN_Rem"
+                Command="{Binding RemoveCommand}"
+                Style="{StaticResource BtnApp}"
+                FontSize="14"
+                Content="Удалить"
+                Width="NaN"
+                HorizontalAlignment="Stretch"
+                Height="25"
+                Opacity="0.5"
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="10,0,10,0"/>
+
+        <Button x:Name="BTN_DopLists"
+                Click="BTN_DopLists_Click"
+                Style="{StaticResource BtnApp}"
+                FontSize="22"
+                Content=">"
+                Width="NaN"
+                HorizontalAlignment="Stretch"
+                Height="NaN"
+                VerticalAlignment="Stretch"
+                Grid.Row="3"
+                Grid.Column="4"
+                Margin="2,0,0,10"/>
+
+        <Button x:Name="BTN_ImpDt"
+                Click="BTN_ImpDt_Click" 
+                Style="{StaticResource BtnApp}"
+                FontSize="22"
+                Content="&lt;"
+                Width="NaN"
+                HorizontalAlignment="Stretch"
+                Height="NaN"
+                VerticalAlignment="Stretch"
+                Grid.Row="4"
+                Grid.Column="4"
+                Margin="2,0,0,10"/>
+
+        <Button x:Name="BTN_ClrPal"
+                Click="BTN_ClrPal_Click"
+                Style="{StaticResource BtnApp}"
+                FontSize="22"
+                Content="X"
+                Width="40"
+                Height="30"
+                Grid.Row="2"
+                VerticalAlignment="Center"
+                Margin="0,0,10,0"/>
+
+        <Button x:Name="BTN_ClrGM"
+                Click="BTN_ClrGM_Click" 
+                Style="{StaticResource BtnApp}"
+                FontSize="22"
+                Content="X"
+                Width="40"
+                Height="30"
+                Grid.Row="2"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Margin="0,0,10,0"/>
+
+        <Button x:Name="BTN_ClrMesh"
+                Click="BTN_ClrMesh_Click" 
+                Style="{StaticResource BtnApp}"
+                FontSize="22"
+                Content="X"
+                Width="40"
+                Height="30"
+                Grid.Row="2"
+                Grid.Column="2"
+                VerticalAlignment="Center"
+                Margin="0,0,10,0"/>
+
+        <Button x:Name="BTN_ClrCont"
+                Click="BTN_ClrCont_Click"
+                Style="{StaticResource BtnApp}"
+                FontSize="22"
+                Content="X"
+                Width="40"
+                Height="30"
+                Grid.Row="2"
+                Grid.Column="3"
+                VerticalAlignment="Center"
+                Margin="0,0,10,0"/>
+
+        <!-- ListBoxes -->
+        <ListBox x:Name="ListPal"
+                 ItemsSource="{Binding PalList}"
+                 SelectedItem="{Binding SelectedListItem}"
+                 Background="#272B2F"
+                 Foreground="#DBDBDB"
+                 FontSize="16"
+                 Grid.Row="3"
+                 Grid.Column="0"
+                 Margin="10,0,10,10"/>
+
+        <ListBox x:Name="ListGM"
+                 ItemsSource="{Binding GMList}"
+                 SelectedItem="{Binding SelectedListItem}"
+                 Background="#272B2F"
+                 Foreground="#DBDBDB"
+                 FontSize="16"
+                 Grid.Row="3"
+                 Grid.Column="1"
+                 Margin="10,0,10,10"/>
+
+        <ListBox x:Name="ListMesh"
+                 ItemsSource="{Binding MeshList}"
+                 SelectedItem="{Binding SelectedListItem}"
+                 Background="#272B2F"
+                 Foreground="#DBDBDB"
+                 FontSize="16"
+                 Grid.Row="3"
+                 Grid.Column="2"
+                 Margin="10,0,10,10"/>
+
+        <ListBox x:Name="ListCont"
+                 ItemsSource="{Binding ContList}"
+                 SelectedItem="{Binding SelectedListItem}"
+                 Background="#272B2F"
+                 Foreground="#DBDBDB"
+                 FontSize="16"
+                 Grid.Row="3"
+                 Grid.Column="3"
+                 Margin="10,0,10,10"/>
+
+        <!-- TextBoxes -->
+        <TextBox x:Name="TBNacl" 
+                 KeyDown="TBNacl_KeyDown"
+                 Text="{Binding EntryText, UpdateSourceTrigger=PropertyChanged}"
+                 Style="{DynamicResource TextBoxApp}"
+                 Width="NaN"
+                 HorizontalAlignment="Stretch"
+                 Margin="10,0,10,0"
+                 ToolTip="Наклейка"/>
+
+        <TextBox x:Name="TBPlmb"
+                 KeyDown="TBPlmb_KeyDown"
+                 Text="{Binding EntryPlomb, UpdateSourceTrigger=PropertyChanged}"
+                 Style="{DynamicResource TextBoxApp}"
+                 Width="NaN"
+                 HorizontalAlignment="Stretch"
+                 Margin="10,0,10,0"
+                 ToolTip="Пломба"
+                 Grid.Column="1"/>
+
+        <TextBox x:Name="TB_autoplomb"
+                 Style="{DynamicResource TextBoxApp}"
+                 Width="NaN"
+                 HorizontalAlignment="Stretch"
+                 Margin="10,0,10,0"
+                 ToolTip="ПЛОМБА МАШИНЫ"
+                 Grid.Column="3"
+                 KeyDown="TBPlmb_KeyDown"/>
+
+        <TextBox x:Name="TB_March"
+                 Text="{Binding March, UpdateSourceTrigger=PropertyChanged}"
+                 Style="{DynamicResource TextBoxApp}"
+                 Width="NaN"
+                 HorizontalAlignment="Stretch"
+                 Margin="10,70,10,0"
+                 Grid.Row="4"
+                 Grid.Column="1"
+                 FontSize="14"
+                 VerticalAlignment="Top"/>
+
+        <TextBox x:Name="TB_FIO"
+                 Text="{Binding FIO, UpdateSourceTrigger=PropertyChanged}"
+                 Style="{DynamicResource TextBoxApp}"
+                 Width="NaN"
+                 HorizontalAlignment="Stretch"
+                 Margin="10,69,10,0"
+                 Grid.Row="4"
+                 FontSize="14"
+                 VerticalAlignment="Top"/>
+
+        <TextBox x:Name="TB_Phone"
+                 Text="{Binding Phone, UpdateSourceTrigger=PropertyChanged}"
+                 Style="{DynamicResource TextBoxApp}"
+                 Width="NaN"
+                 HorizontalAlignment="Stretch"
+                 Margin="10,70,10,0"
+                 Grid.Row="4"
+                 Grid.Column="2"
+                 FontSize="14"
+                 VerticalAlignment="Top"
+                 Height="29"/>
+
+        <TextBox x:Name="TB_Auto1"
+                 Text="{Binding Auto1, UpdateSourceTrigger=PropertyChanged}"
+                 Style="{DynamicResource TextBoxApp}"
+                 Width="NaN"
+                 HorizontalAlignment="Stretch"
+                 Margin="10,10,10,0"
+                 Grid.Row="4"
+                 Grid.Column="3"
+                 FontSize="14"
+                 VerticalAlignment="Top"/>
+
+        <TextBox x:Name="TB_Auto2"
+                 Text="{Binding Auto2, UpdateSourceTrigger=PropertyChanged}"
+                 Style="{DynamicResource TextBoxApp}"
+                 Width="NaN"
+                 HorizontalAlignment="Stretch"
+                 Margin="10,60,10,0"
+                 Grid.Row="4"
+                 Grid.Column="3"
+                 FontSize="14"
+                 VerticalAlignment="Top"/>
+
+        <!-- ComboBox -->
+        <ComboBox x:Name="CBType"
+                  ItemsSource="{Binding Types}"
+                  SelectedIndex="{Binding SelectedTypeIndex}"
+                  Style="{StaticResource ComboBoxApp}"
+                  Width="NaN"
+                  Height="30"
+                  HorizontalAlignment="Stretch"
+                  Grid.Column="2"
+                  Margin="10,0,10,0">
+            <ComboBoxItem Content="Паллет"/>
+            <ComboBoxItem Content="ГМ"/>
+            <ComboBoxItem Content="Мешок"/>
+            <ComboBoxItem Content="Контейнер"/>
+            <ComboBoxItem Content="Сейфпакет"/>
+            <ComboBoxItem Content="Засыл"/>
+        </ComboBox>
+
+        <!-- TextBlocks -->
+        <TextBlock Text="Паллеты:"
+                   Foreground="#DBDBDB"
+                   FontSize="20"
+                   VerticalAlignment="Center"
+                   FontFamily="/Fonts/#Rubik Medium"
+                   Height="30"
+                   Width="330"
+                   Grid.Row="2"
+                   HorizontalAlignment="Left"
+                   Margin="10,0,0,0"/>
+        <TextBlock Text="ГМы:"
+                   Foreground="#DBDBDB"
+                   FontSize="20"
+                   VerticalAlignment="Center"
+                   FontFamily="/Fonts/#Rubik Medium"
+                   Height="30"
+                   Width="330"
+                   Grid.Row="2"
+                   Grid.Column="1"
+                   HorizontalAlignment="Left"
+                   Margin="10,0,0,0"/>
+        <TextBlock Text="Мешки:"
+                   Foreground="#DBDBDB"
+                   FontSize="20"
+                   VerticalAlignment="Center"
+                   FontFamily="/Fonts/#Rubik Medium"
+                   Height="30"
+                   Width="330"
+                   Grid.Row="2"
+                   Grid.Column="2"
+                   HorizontalAlignment="Left"
+                   Margin="10,0,0,0"/>
+        <TextBlock Text="Контейнеры:"
+                   Foreground="#DBDBDB"
+                   FontSize="20"
+                   VerticalAlignment="Center"
+                   FontFamily="/Fonts/#Rubik Medium"
+                   Height="30"
+                   Width="330"
+                   Grid.Row="2"
+                   Grid.Column="3"
+                   HorizontalAlignment="Left"
+                   Margin="10,0,0,0"/>
+
+        <TextBlock x:Name="TBO_Pal"
+                   Text="0 / 0"
+                   Foreground="#DBDBDB"
+                   FontSize="14"
+                   VerticalAlignment="Center"
+                   FontFamily="/Fonts/#Rubik Medium"
+                   Height="20"
+                   Grid.Row="2"
+                   Margin="10,0,54,0"
+                   Opacity="0.5"
+                   TextAlignment="Right"/>
+
+        <TextBlock x:Name="TBO_GM"
+                   Text="0 / 0"
+                   Foreground="#DBDBDB"
+                   FontSize="14"
+                   VerticalAlignment="Center"
+                   FontFamily="/Fonts/#Rubik Medium"
+                   Height="20"
+                   Grid.Row="2"
+                   Grid.Column="1"
+                   Margin="10,0,54,0"
+                   Opacity="0.5"
+                   TextAlignment="Right"/>
+
+        <TextBlock x:Name="TBO_Mesh"
+                   Text="0 / 0"
+                   Foreground="#DBDBDB"
+                   FontSize="14"
+                   VerticalAlignment="Center"
+                   FontFamily="/Fonts/#Rubik Medium"
+                   Height="20"
+                   Grid.Row="2"
+                   Grid.Column="2"
+                   Margin="10,0,54,0"
+                   Opacity="0.5"
+                   TextAlignment="Right"/>
+
+        <TextBlock x:Name="TBO_Cont"
+                   Text="0 / 0"
+                   Foreground="#DBDBDB"
+                   FontSize="14"
+                   VerticalAlignment="Center"
+                   FontFamily="/Fonts/#Rubik Medium"
+                   Height="20"
+                   Grid.Row="2"
+                   Grid.Column="3"
+                   Margin="10,0,54,0"
+                   Opacity="0.5"
+                   TextAlignment="Right"/>
+
+        <!-- RichTextBoxes -->
+        <RichTextBox x:Name="RTBoooinn"
+                     Style="{DynamicResource RichTextBoxApp}"
+                     Grid.Row="4"
+                     Height="64"
+                     Margin="10,0,10,0"
+                     Width="NaN"
+                     VerticalAlignment="Top"
+                     SelectionBrush="#FF008EFF">
+            <FlowDocument>
+                <Paragraph>
+                    <Run Text="{Binding OOOINN, UpdateSourceTrigger=PropertyChanged}"/>
+                </Paragraph>
+            </FlowDocument>
+            <RichTextBox.Resources>
+                <Style TargetType="{x:Type Paragraph}">
+                    <Setter Property="Margin" Value="0"/>
+                </Style>
+            </RichTextBox.Resources>
+        </RichTextBox>
+
+        <RichTextBox x:Name="RTBdt"
+                     Style="{DynamicResource RichTextBoxApp}"
+                     Width="NaN"
+                     HorizontalAlignment="Stretch"
+                     Margin="10,0,10,0"
+                     Grid.Row="4"
+                     Height="64"
+                     Grid.Column="1"
+                     VerticalAlignment="Top"
+                     Grid.ColumnSpan="2">
+            <FlowDocument>
+                <Paragraph>
+                    <Run Text="{Binding dt, UpdateSourceTrigger=PropertyChanged}"/>
+                </Paragraph>
+            </FlowDocument>
+            <RichTextBox.Resources>
+                <Style TargetType="{x:Type Paragraph}">
+                    <Setter Property="Margin" Value="0"/>
+                </Style>
+            </RichTextBox.Resources>
+        </RichTextBox>
+
+    </Grid>
+</UserControl>

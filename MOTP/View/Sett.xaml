@@ -15,19 +15,41 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
-            <RowDefinition />
+            <RowDefinition/>
             <RowDefinition Height="30"/>
-            <RowDefinition />
+            <RowDefinition/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
+        <!-- RichTextBoxes -->
+        <RichTextBox x:Name="RTB_Sdach"
+                     Style="{DynamicResource RichTextBoxApp}"
+                     Grid.Row="1"
+                     Margin="10,0,10,10"
+                     Width="NaN"
+                     HorizontalAlignment="Stretch"
+                     Height="NaN"
+                     VerticalAlignment="Stretch">
+            <RichTextBox.Resources>
+                <Style TargetType="{x:Type Paragraph}">
+                    <Setter Property="Margin" Value="0"/>
+                </Style>
+            </RichTextBox.Resources>
+            <FlowDocument>
+                <Paragraph>
+                    <Run Text="{Binding Sdach, UpdateSourceTrigger=PropertyChanged}"/>
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+
         <RichTextBox x:Name="RTB_Poluch"
-            Style="{DynamicResource RichTextBoxApp}"
+                     Style="{DynamicResource RichTextBoxApp}"
                      Grid.Row="3"
                      Margin="10,0,10,10"
-            Width="NaN" HorizontalAlignment="Stretch"
-            Height="NaN" VerticalAlignment="Stretch" Loaded="RTB_Poluch_Loaded" LostFocus="RTB_Poluch_LostFocus">
-
+                     Width="NaN"
+                     HorizontalAlignment="Stretch"
+                     Height="NaN"
+                     VerticalAlignment="Stretch">
             <RichTextBox.Resources>
                 <Style TargetType="{x:Type Paragraph}">
                     <Setter Property="Margin" Value="0"/>
@@ -35,52 +57,42 @@
             </RichTextBox.Resources>
             <FlowDocument>
                 <Paragraph>
-                    <Run Text="Грузополучатель юр адресс"/>
+                    <Run Text="{Binding Poluch, UpdateSourceTrigger=PropertyChanged}"/>
                 </Paragraph>
             </FlowDocument>
         </RichTextBox>
 
-        <RichTextBox x:Name="RTB_Sdach"
-            Style="{DynamicResource RichTextBoxApp}"
-            Grid.Row="1"
-            Margin="10,0,10,10"
-            Width="NaN" HorizontalAlignment="Stretch"
-            Height="NaN" VerticalAlignment="Stretch" Loaded="RTB_Sdach_Loaded" LostFocus="RTB_Sdach_LostFocus">
-
-            <RichTextBox.Resources>
-                <Style TargetType="{x:Type Paragraph}">
-                    <Setter Property="Margin" Value="0"/>
-                </Style>
-            </RichTextBox.Resources>
-            <FlowDocument>
-                <Paragraph>
-                    <Run Text="Сдача груза"/>
-                </Paragraph>
-            </FlowDocument>
-        </RichTextBox>
-
+        <!-- Buttons -->
         <Button Style="{StaticResource BtnApp}"
-            Content="Стереть внесённые данные станции"
-            Margin="10,0,0,0" HorizontalAlignment="Left" Width="290" Height="30
-                " Grid.Row="5" Click="Button_Click" VerticalAlignment="Center" />
-        <TextBlock 
-            Text="Адрес сдачи груза:"
-            Foreground="#DBDBDB"
-            FontSize="20"
-            VerticalAlignment="Center"
-            FontFamily="/Fonts/#Rubik Medium" 
-            Height="30" Width="330" 
-            HorizontalAlignment="Left" 
-            Margin="10,0,0,0" />
-        <TextBlock 
-            Text="Юр. адрес грузополучателя:"
-            Foreground="#DBDBDB"
-            FontSize="20"
-            VerticalAlignment="Center"
-            FontFamily="/Fonts/#Rubik Medium" 
-            Height="30" Width="330" 
-            Grid.Row="2" 
-            HorizontalAlignment="Left" 
-            Margin="10,0,0,0" />
+                Content="Стереть внесённые данные станции"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Left"
+                Width="290"
+                Height="30"
+                Grid.Row="5"
+                VerticalAlignment="Center"
+                Click="Button_Click"/>
+
+        <!-- TextBlocks -->
+        <TextBlock Text="Адрес сдачи груза:"
+                   Foreground="#DBDBDB"
+                   FontSize="20"
+                   VerticalAlignment="Center"
+                   FontFamily="/Fonts/#Rubik Medium"
+                   Height="30"
+                   Width="330"
+                   HorizontalAlignment="Left"
+                   Margin="10,0,0,0"/>
+
+        <TextBlock Text="Юр. адрес грузополучателя:"
+                   Foreground="#DBDBDB"
+                   FontSize="20"
+                   VerticalAlignment="Center"
+                   FontFamily="/Fonts/#Rubik Medium"
+                   Height="30"
+                   Width="330"
+                   Grid.Row="2"
+                   HorizontalAlignment="Left"
+                   Margin="10,0,0,0"/>
     </Grid>
 </Window>
