@@ -111,8 +111,6 @@ namespace MOTP.View
                 return RegMat(input, PatModManager._DataPatNacs, index);
             else
                 return RegMat(input, PatModManager._DataPatPlbs, index);
-
-            //return RegMat(input, PatModManager._DataPatNacs, index);
         }
         private bool RegMat(string input, ObservableCollection<PatMod> PMM, int index)
         {
@@ -213,27 +211,11 @@ namespace MOTP.View
         {
             try
             {
-                //string[] splcliptxtp = cliptxt.Split('\n');
-                //string txt = "";
-
-                //for (int i = 0; i < splcliptxtp.Length; i++)
-                //    if (splcliptxtp[i] == " \r")
-                //        txt += "`";
-                //    else
-                //        txt += splcliptxtp[i];
-
-                //string[] splcliptxt = txt.Split('`');
-
                 cliptxt = cliptxt.Replace("\r\n", "|");
                 cliptxt = cliptxt.Replace("||", "`");
                 cliptxt = cliptxt.Replace("|", " ");
 
                 string[] splcliptxt = cliptxt.Split('`');
-
-
-
-                //for (int i = 0; i < splcliptxt.Length; i++)
-                //    MessageBox.Show($"{i} {splcliptxt[i]}");
 
                 FlowDocument document = new FlowDocument();
                 Paragraph paragraph = new Paragraph();
