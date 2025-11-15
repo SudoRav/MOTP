@@ -31,7 +31,7 @@ namespace MOTP.View
         public string EntryPlomb { get => _entryPlomb; set { _entryPlomb = value; OnPropertyChanged(); } }
 
 
-        public IList Types { get; } = new[] { "паллет", "гм", "мешок", "контейнер", "сейфпакет", "гм(зас)" };
+        public IList Types { get; } = new[] { "Паллет", "ГМ", "Мешок", "Контейнер", "Сейфпакет", "Засыл" };
         public int SelectedTypeIndex { get; set; }
 
 
