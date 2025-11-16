@@ -1,6 +1,5 @@
 ﻿using MOTP.Utilities;
 using System.Windows.Input;
-using Stat; // если Stat в другом неймспейсе - укажи правильный
 
 namespace MOTP.ViewModel
 {

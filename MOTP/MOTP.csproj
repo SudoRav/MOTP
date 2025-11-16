@@ -129,42 +129,6 @@
     <Compile Include="View\Stations\BUhunskay.xaml.cs">
       <DependentUpon>BUhunskay.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Stations\Egorevsk.xaml.cs">
-      <DependentUpon>Egorevsk.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Stations\Helkovskay.xaml.cs">
-      <DependentUpon>Helkovskay.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Stations\Himki.xaml.cs">
-      <DependentUpon>Himki.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Stations\Marta.xaml.cs">
-      <DependentUpon>Marta.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Stations\Odincovo.xaml.cs">
-      <DependentUpon>Odincovo.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Stations\Pererva.xaml.cs">
-      <DependentUpon>Pererva.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Stations\Privolnay.xaml.cs">
-      <DependentUpon>Privolnay.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Stations\Puhkino.xaml.cs">
-      <DependentUpon>Puhkino.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Stations\Rybinovay.xaml.cs">
-      <DependentUpon>Rybinovay.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Stations\Sharapovo.xaml.cs">
-      <DependentUpon>Sharapovo.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Stations\Skladohnay.xaml.cs">
-      <DependentUpon>Skladohnay.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Stations\Vehki.xaml.cs">
-      <DependentUpon>Vehki.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\StationView.xaml.cs">
       <DependentUpon>StationView.xaml</DependentUpon>
     </Compile>
@@ -234,54 +198,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Stations\BUhunskay.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Stations\Egorevsk.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Stations\Helkovskay.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Stations\Himki.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Stations\Marta.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Stations\Odincovo.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Stations\Pererva.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Stations\Privolnay.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Stations\Puhkino.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Stations\Rybinovay.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Stations\Sharapovo.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Stations\Skladohnay.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Stations\Vehki.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

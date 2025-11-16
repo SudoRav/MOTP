@@ -14,7 +14,7 @@
         Background="Transparent" Closing="Window_Closing" Loaded="Window_Loaded">
 
     <Window.DataContext>
-        <vm:NavigationVM />
+        <vm:NavigationVM/>
     </Window.DataContext>
 
     <Grid>

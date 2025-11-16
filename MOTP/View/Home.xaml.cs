@@ -1,26 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using Aspose.Html;
+using ClosedXML.Excel;
+using Microsoft.Toolkit.Uwp.Notifications;
+using Microsoft.Win32;
+using MOTP.Model;
+using Spire.Xls;
+using Stat;
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Drawing.Printing;
+using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Text;
-using System.Text.RegularExpressions;
-using Microsoft.Win32;
-using System.IO;
 using System.Windows.Media.Imaging;
-using ClosedXML.Excel;
-using System.Net.Http;
-using MOTP.Model;
-using System.Collections.ObjectModel;
-using System.Drawing.Printing;
-using Spire.Xls;
-using Microsoft.Toolkit.Uwp.Notifications;
 using System.Xml;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Net;
 
 namespace MOTP.View
 {
@@ -1460,218 +1462,105 @@ namespace MOTP.View
             return str;
         }
 
-        static private void LoadData()
+        // =============================================================
+        // Таблица всех станций в правильном порядке
+        // =============================================================
+        private static readonly StationData[] Stations =
         {
-            if (MessageBox.Show("Импортировать данные?\nЭто приведёт к удалению внесённых, на данным момент, данных и замене их новыми из предоставляемого файла!", "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes)
+    Himki.Data,
+    Marta.Data,
+    Puhkino.Data,
+    Privolnay.Data,
+    Vehki.Data,
+    Rybinovay.Data,
+    Sharapovo.Data,
+    Helkovskay.Data,
+    Odincovo.Data,
+    Skladohnay.Data,
+    Pererva.Data,
+    BUhunskay.Data,
+    Egorevsk.Data
+};
+
+        // =============================================================
+        // Карта свойств StationData (строковые поля)
+        // =============================================================
+        private static readonly Dictionary<string, Action<StationData, string>> fieldMap =
+            new()
+            {
+                ["oooinn"] = (s, v) => s.oooinn = v,
+                ["fio"] = (s, v) => s.fio = v,
+                ["march"] = (s, v) => s.march = v,
+                ["phone"] = (s, v) => s.phone = v,
+                ["dt"] = (s, v) => s.dt = v,
+                ["auto1"] = (s, v) => s.auto1 = v,
+                ["auto2"] = (s, v) => s.auto2 = v,
+                ["autoplomb"] = (s, v) => s.autoplomb = v,
+                ["sdach"] = (s, v) => s.sdach = v,
+                ["poluch"] = (s, v) => s.poluch = v,
+                ["ts"] = (s, v) => s.ts = v,
+            };
+
+        // =============================================================
+        // Карта списков (pal, gm, mesh, cont, save, zas)
+        // =============================================================
+        private static readonly Dictionary<string, Func<StationData, List<string>>> listMap =
+            new()
+            {
+                ["pal"] = s => s._listPal,
+                ["gm"] = s => s._listGM,
+                ["mesh"] = s => s._listMesh,
+                ["cont"] = s => s._listCont,
+                ["save"] = s => s._listSave,
+                ["zas"] = s => s._listZas
+            };
+
+        // =============================================================
+        // ГЛАВНЫЙ МЕТОД: LoadData
+        // =============================================================
+        public void LoadData(string xmlPath)
+        {
+            XmlDocument xDoc = new();
+            xDoc.Load(xmlPath);
+
+            XmlElement xroot = xDoc.DocumentElement;
+            if (xroot == null)
                 return;
 
-            try
+            int stationIndex = -1;
+
+            foreach (XmlNode stationNode in xroot)
             {
-                OpenFileDialog dialog = new OpenFileDialog
+                stationIndex++;
+                if (stationIndex >= Stations.Length)
+                    break;
+
+                StationData station = Stations[stationIndex];
+
+                foreach (XmlNode child in stationNode.ChildNodes)
                 {
-                    InitialDirectory = Environment.CurrentDirectory,
-                    CheckPathExists = true,
-                    Filter = "Xml Files(*.xml)|*.xml|All Files(*.*)|*.*"
-                };
-                if (Properties.Settings.Default.savePathFileDir != " ")
-                {
-                    dialog.FileName = Properties.Settings.Default.savePathFileDir;
-                }
-                if (dialog.ShowDialog() == true)
-                {
-                    Properties.Settings.Default.savePathFileDir = dialog.FileName;
-                    Properties.Settings.Default.Save();
-                }
-                else { return; }
+                    string name = child.Name.ToLower();
+                    string value = child.InnerText;
 
-                XmlDocument xdoc = new XmlDocument();
-
-                try { xdoc.Load(Properties.Settings.Default.savePathFileDir); }
-                catch (Exception ex) { Debug.WriteLine(ex); }
-
-                XmlElement xroot = xdoc.DocumentElement;
-
-                for (int i0 = 0; i0 < 13; i0++)
-                    for (int j0 = 0; j0 < 6; j0++)
-                        Stat.Settings.arr[i0][j0].Clear();
-
-                Stat.Himki.oooinn = "ООО ИНН"; Stat.Himki.fio = "ФИО"; Stat.Himki.march = "Подольских Курсантов — Химки"; Stat.Himki.phone = "Телефон"; Stat.Himki.dt = "Данные водителя"; Stat.Himki.auto1 = "Марка машины"; Stat.Himki.auto2 = "Номер машины"; Stat.Himki.autoplomb = ""; Stat.Himki.sdach = "г. Москва, Химки, проезд Коммунальный, д. 30а, стр. 1"; Stat.Himki.poluch = "г. Москва, вн. тер. г. муниципальный округ Черемушки, ул. Намёткина, д. 12А, помещ. XVII, ком. 9.";
-                Stat.Marta.oooinn = "ООО ИНН"; Stat.Marta.fio = "ФИО"; Stat.Marta.march = "Подольских Курсантов — 8-марта"; Stat.Marta.phone = "Телефон"; Stat.Marta.dt = "Данные водителя"; Stat.Marta.auto1 = "Марка машины"; Stat.Marta.auto2 = "Номер машины"; Stat.Marta.autoplomb = ""; Stat.Marta.sdach = "г. Москва, ул. 8 марта, д. 14 с. 1"; Stat.Marta.poluch = "г. Москва, вн. тер. г. муниципальный округ Черемушки, ул. Намёткина, д. 12А, помещ. XVII, ком. 9.";
-                Stat.Puhkino.oooinn = "ООО ИНН"; Stat.Puhkino.fio = "ФИО"; Stat.Puhkino.march = "Подольских Курсантов — Пушкино"; Stat.Puhkino.phone = "Телефон"; Stat.Puhkino.dt = "Данные водителя"; Stat.Puhkino.auto1 = "Марка машины"; Stat.Puhkino.auto2 = "Номер машины"; Stat.Puhkino.autoplomb = ""; Stat.Puhkino.sdach = "МО, г. Пушкино, Ярославское шоссе, 222"; Stat.Puhkino.poluch = "г. Москва, вн. тер. г. муниципальный округ Черемушки, ул. Намёткина, д. 12А, помещ. XVII, ком. 9.";
-                Stat.Privolnay.oooinn = "ООО ИНН"; Stat.Privolnay.fio = "ФИО"; Stat.Privolnay.march = "Подольских Курсантов — Привольная"; Stat.Privolnay.phone = "Телефон"; Stat.Privolnay.dt = "Данные водителя"; Stat.Privolnay.auto1 = "Марка машины"; Stat.Privolnay.auto2 = "Номер машины"; Stat.Privolnay.autoplomb = ""; Stat.Privolnay.sdach = "Привольная улица, 8"; Stat.Privolnay.poluch = "г. Москва, вн. тер. г. муниципальный округ Черемушки, ул. Намёткина, д. 12А, помещ. XVII, ком. 9.";
-                Stat.Vehki.oooinn = "ООО ИНН"; Stat.Vehki.fio = "ФИО"; Stat.Vehki.march = "Подольских Курсантов — Вешки"; Stat.Vehki.phone = "Телефон"; Stat.Vehki.dt = "Данные водителя"; Stat.Vehki.auto1 = "Марка машины"; Stat.Vehki.auto2 = "Номер машины"; Stat.Vehki.autoplomb = ""; Stat.Vehki.sdach = "Мытищинский р-н, ш. Липкинское, 2-й км, территория ТПЗ \"Алтуфьево\" вл.1, стр.1Б.)"; Stat.Vehki.poluch = "г. Москва, вн. тер. г. муниципальный округ Черемушки, ул. Намёткина, д. 12А, помещ. XVII, ком. 9.";
-                Stat.Rybinovay.oooinn = "ООО ИНН"; Stat.Rybinovay.fio = "ФИО"; Stat.Rybinovay.march = "Подольских Курсантов — Рябиновая"; Stat.Rybinovay.phone = "Телефон"; Stat.Rybinovay.dt = "Данные водителя"; Stat.Rybinovay.auto1 = "Марка машины"; Stat.Rybinovay.auto2 = "Номер машины"; Stat.Rybinovay.autoplomb = ""; Stat.Rybinovay.sdach = "Москва ул. Рябиновая 53 стр.2"; Stat.Rybinovay.poluch = "г. Москва, вн. тер. г. муниципальный округ Черемушки, ул. Намёткина, д. 12А, помещ. XVII, ком. 9.";
-                Stat.Sharapovo.oooinn = "ООО ИНН"; Stat.Sharapovo.fio = "ФИО"; Stat.Sharapovo.march = "Подольских Курсантов — Шарапово"; Stat.Sharapovo.phone = "Телефон"; Stat.Sharapovo.dt = "Данные водителя"; Stat.Sharapovo.auto1 = "Марка машины"; Stat.Sharapovo.auto2 = "Номер машины"; Stat.Sharapovo.autoplomb = ""; Stat.Sharapovo.sdach = "г. Москва, сельское поселение Марушкинское, д. Шарапово, ул.124 Придорожная, стр. 7А,стр1"; Stat.Sharapovo.poluch = "г. Москва, вн. тер. г. муниципальный округ Черемушки, ул. Намёткина, д. 12А, помещ. XVII, ком. 9.";
-                Stat.Helkovskay.oooinn = "ООО ИНН"; Stat.Helkovskay.fio = "ФИО"; Stat.Helkovskay.march = "Подольских Курсантов — Щёлковская"; Stat.Helkovskay.phone = "Телефон"; Stat.Helkovskay.dt = "Данные водителя"; Stat.Helkovskay.auto1 = "Марка машины"; Stat.Helkovskay.auto2 = "Номер машины"; Stat.Helkovskay.autoplomb = ""; Stat.Helkovskay.sdach = "Щелковское шоссе 100к100"; Stat.Helkovskay.poluch = "г. Москва, вн. тер. г. муниципальный округ Черемушки, ул. Намёткина, д. 12А, помещ. XVII, ком. 9.";
-                Stat.Odincovo.oooinn = "ООО ИНН"; Stat.Odincovo.fio = "ФИО"; Stat.Odincovo.march = "Подольских Курсантов — Одинцово"; Stat.Odincovo.phone = "Телефон"; Stat.Odincovo.dt = "Данные водителя"; Stat.Odincovo.auto1 = "Марка машины"; Stat.Odincovo.auto2 = "Номер машины"; Stat.Odincovo.autoplomb = ""; Stat.Odincovo.sdach = "Г. Одинцово, Ул Зеленая 10"; Stat.Odincovo.poluch = "г. Москва, вн. тер. г. муниципальный округ Черемушки, ул. Намёткина, д. 12А, помещ. XVII, ком. 9.";
-                Stat.Skladohnay.oooinn = "ООО ИНН"; Stat.Skladohnay.fio = "ФИО"; Stat.Skladohnay.march = "Подольских Курсантов — Складочная"; Stat.Skladohnay.phone = "Телефон"; Stat.Skladohnay.dt = "Данные водителя"; Stat.Skladohnay.auto1 = "Марка машины"; Stat.Skladohnay.auto2 = "Номер машины"; Stat.Skladohnay.autoplomb = ""; Stat.Skladohnay.sdach = "г.Москва, ул.Складочная 1с6"; Stat.Skladohnay.poluch = "г. Москва, вн. тер. г. муниципальный округ Черемушки, ул. Намёткина, д. 12А, помещ. XVII, ком. 9.";
-                Stat.Pererva.oooinn = "ООО ИНН"; Stat.Pererva.fio = "ФИО"; Stat.Pererva.march = "Подольских Курсантов — Перерва"; Stat.Pererva.phone = "Телефон"; Stat.Pererva.dt = "Данные водителя"; Stat.Pererva.auto1 = "Марка машины"; Stat.Pererva.auto2 = "Номер машины"; Stat.Pererva.autoplomb = ""; Stat.Pererva.sdach = "г. Москва,Перерва, 19с2"; Stat.Pererva.poluch = "г. Москва, вн. тер. г. муниципальный округ Черемушки, ул. Намёткина, д. 12А, помещ. XVII, ком. 9.";
-                Stat.BUhunskay.oooinn = "ООО ИНН"; Stat.BUhunskay.fio = "ФИО"; Stat.BUhunskay.march = "Подольских Курсантов — Большая Юшуньская"; Stat.BUhunskay.phone = "Телефон"; Stat.BUhunskay.dt = "Данные водителя"; Stat.BUhunskay.auto1 = "Марка машины"; Stat.BUhunskay.auto2 = "Номер машины"; Stat.BUhunskay.autoplomb = ""; Stat.BUhunskay.sdach = "ул Большая Юшуньская , д. 7"; Stat.BUhunskay.poluch = "г. Москва, вн. тер. г. муниципальный округ Черемушки, ул. Намёткина, д. 12А, помещ. XVII, ком. 9.";
-                Stat.Egorevsk.oooinn = "ООО ИНН"; Stat.Egorevsk.fio = "ФИО"; Stat.Egorevsk.march = "Подольских Курсантов — Егоревск"; Stat.Egorevsk.phone = "Телефон"; Stat.Egorevsk.dt = "Данные водителя"; Stat.Egorevsk.auto1 = "Марка машины"; Stat.Egorevsk.auto2 = "Номер машины"; Stat.Egorevsk.autoplomb = ""; Stat.Egorevsk.sdach = "г. Московская область, г.о. Егоревск г. Егоревск,ул Советская, 81"; Stat.Egorevsk.poluch = "г. Москва, вн. тер. г. муниципальный округ Черемушки, ул. Намёткина, д. 12А, помещ. XVII, ком. 9.";
-
-                int el = 0;
-                int i = -1;
-                if (xroot != null)
-                {
-                    foreach (XmlElement xnode in xroot)
+                    // ----------------------------------
+                    // Если это строковое поле (fio, oooinn...)
+                    // ----------------------------------
+                    if (fieldMap.TryGetValue(name, out var setter))
                     {
-                        i++;
+                        setter(station, value);
+                        continue;
+                    }
 
-                        foreach (XmlNode childnode in xnode.ChildNodes)
-                        {
-                            if (childnode.Name == "pal") { AddXmlElement(childnode.InnerText, "pal", i); el++; }
-                            if (childnode.Name == "gm") { AddXmlElement(childnode.InnerText, "gm", i); el++; }
-                            if (childnode.Name == "mesh") { AddXmlElement(childnode.InnerText, "mesh", i); el++; }
-                            if (childnode.Name == "cont") { AddXmlElement(childnode.InnerText, "cont", i); el++; }
-                            if (childnode.Name == "save") { AddXmlElement(childnode.InnerText, "save", i); el++; }
-                            if (childnode.Name == "zas") { AddXmlElement(childnode.InnerText, "zas", i); el++; }
-
-                            switch (i)
-                            {
-                                case 0:
-                                    if (childnode.Name == "oooinn") Stat.Himki.oooinn = childnode.InnerText;
-                                    if (childnode.Name == "fio") Stat.Himki.fio = childnode.InnerText;
-                                    if (childnode.Name == "march") Stat.Himki.march = childnode.InnerText;
-                                    if (childnode.Name == "phone") Stat.Himki.phone = childnode.InnerText;
-                                    if (childnode.Name == "dt") Stat.Himki.dt = childnode.InnerText;
-                                    if (childnode.Name == "auto1") Stat.Himki.auto1 = childnode.InnerText;
-                                    if (childnode.Name == "auto2") Stat.Himki.auto2 = childnode.InnerText;
-                                    if (childnode.Name == "autoplomb") Stat.Himki.autoplomb = childnode.InnerText;
-                                    break;
-                                case 1:
-                                    if (childnode.Name == "oooinn") Stat.Marta.oooinn = childnode.InnerText;
-                                    if (childnode.Name == "fio") Stat.Marta.fio = childnode.InnerText;
-                                    if (childnode.Name == "march") Stat.Marta.march = childnode.InnerText;
-                                    if (childnode.Name == "phone") Stat.Marta.phone = childnode.InnerText;
-                                    if (childnode.Name == "dt") Stat.Marta.dt = childnode.InnerText;
-                                    if (childnode.Name == "auto1") Stat.Marta.auto1 = childnode.InnerText;
-                                    if (childnode.Name == "auto2") Stat.Marta.auto2 = childnode.InnerText;
-                                    if (childnode.Name == "autoplomb") Stat.Marta.autoplomb = childnode.InnerText;
-                                    break;
-                                case 2:
-                                    if (childnode.Name == "oooinn") Stat.Puhkino.oooinn = childnode.InnerText;
-                                    if (childnode.Name == "fio") Stat.Puhkino.fio = childnode.InnerText;
-                                    if (childnode.Name == "march") Stat.Puhkino.march = childnode.InnerText;
-                                    if (childnode.Name == "phone") Stat.Puhkino.phone = childnode.InnerText;
-                                    if (childnode.Name == "dt") Stat.Puhkino.dt = childnode.InnerText;
-                                    if (childnode.Name == "auto1") Stat.Puhkino.auto1 = childnode.InnerText;
-                                    if (childnode.Name == "auto2") Stat.Puhkino.auto2 = childnode.InnerText;
-                                    if (childnode.Name == "autoplomb") Stat.Puhkino.autoplomb = childnode.InnerText;
-                                    break;
-                                case 3:
-                                    if (childnode.Name == "oooinn") Stat.Privolnay.oooinn = childnode.InnerText;
-                                    if (childnode.Name == "fio") Stat.Privolnay.fio = childnode.InnerText;
-                                    if (childnode.Name == "march") Stat.Privolnay.march = childnode.InnerText;
-                                    if (childnode.Name == "phone") Stat.Privolnay.phone = childnode.InnerText;
-                                    if (childnode.Name == "dt") Stat.Privolnay.dt = childnode.InnerText;
-                                    if (childnode.Name == "auto1") Stat.Privolnay.auto1 = childnode.InnerText;
-                                    if (childnode.Name == "auto2") Stat.Privolnay.auto2 = childnode.InnerText;
-                                    if (childnode.Name == "autoplomb") Stat.Privolnay.autoplomb = childnode.InnerText;
-                                    break;
-                                case 4:
-                                    if (childnode.Name == "oooinn") Stat.Vehki.oooinn = childnode.InnerText;
-                                    if (childnode.Name == "fio") Stat.Vehki.fio = childnode.InnerText;
-                                    if (childnode.Name == "march") Stat.Vehki.march = childnode.InnerText;
-                                    if (childnode.Name == "phone") Stat.Vehki.phone = childnode.InnerText;
-                                    if (childnode.Name == "dt") Stat.Vehki.dt = childnode.InnerText;
-                                    if (childnode.Name == "auto1") Stat.Vehki.auto1 = childnode.InnerText;
-                                    if (childnode.Name == "auto2") Stat.Vehki.auto2 = childnode.InnerText;
-                                    if (childnode.Name == "autoplomb") Stat.Vehki.autoplomb = childnode.InnerText;
-                                    break;
-                                case 5:
-                                    if (childnode.Name == "oooinn") Stat.Rybinovay.oooinn = childnode.InnerText;
-                                    if (childnode.Name == "fio") Stat.Rybinovay.fio = childnode.InnerText;
-                                    if (childnode.Name == "march") Stat.Rybinovay.march = childnode.InnerText;
-                                    if (childnode.Name == "phone") Stat.Rybinovay.phone = childnode.InnerText;
-                                    if (childnode.Name == "dt") Stat.Rybinovay.dt = childnode.InnerText;
-                                    if (childnode.Name == "auto1") Stat.Rybinovay.auto1 = childnode.InnerText;
-                                    if (childnode.Name == "auto2") Stat.Rybinovay.auto2 = childnode.InnerText;
-                                    if (childnode.Name == "autoplomb") Stat.Rybinovay.autoplomb = childnode.InnerText;
-                                    break;
-                                case 6:
-                                    if (childnode.Name == "oooinn") Stat.Sharapovo.oooinn = childnode.InnerText;
-                                    if (childnode.Name == "fio") Stat.Sharapovo.fio = childnode.InnerText;
-                                    if (childnode.Name == "march") Stat.Sharapovo.march = childnode.InnerText;
-                                    if (childnode.Name == "phone") Stat.Sharapovo.phone = childnode.InnerText;
-                                    if (childnode.Name == "dt") Stat.Sharapovo.dt = childnode.InnerText;
-                                    if (childnode.Name == "auto1") Stat.Sharapovo.auto1 = childnode.InnerText;
-                                    if (childnode.Name == "auto2") Stat.Sharapovo.auto2 = childnode.InnerText;
-                                    if (childnode.Name == "autoplomb") Stat.Sharapovo.autoplomb = childnode.InnerText;
-                                    break;
-                                case 7:
-                                    if (childnode.Name == "oooinn") Stat.Helkovskay.oooinn = childnode.InnerText;
-                                    if (childnode.Name == "fio") Stat.Helkovskay.fio = childnode.InnerText;
-                                    if (childnode.Name == "march") Stat.Helkovskay.march = childnode.InnerText;
-                                    if (childnode.Name == "phone") Stat.Helkovskay.phone = childnode.InnerText;
-                                    if (childnode.Name == "dt") Stat.Helkovskay.dt = childnode.InnerText;
-                                    if (childnode.Name == "auto1") Stat.Helkovskay.auto1 = childnode.InnerText;
-                                    if (childnode.Name == "auto2") Stat.Helkovskay.auto2 = childnode.InnerText;
-                                    if (childnode.Name == "autoplomb") Stat.Helkovskay.autoplomb = childnode.InnerText;
-                                    break;
-                                case 8:
-                                    if (childnode.Name == "oooinn") Stat.Odincovo.oooinn = childnode.InnerText;
-                                    if (childnode.Name == "fio") Stat.Odincovo.fio = childnode.InnerText;
-                                    if (childnode.Name == "march") Stat.Odincovo.march = childnode.InnerText;
-                                    if (childnode.Name == "phone") Stat.Odincovo.phone = childnode.InnerText;
-                                    if (childnode.Name == "dt") Stat.Odincovo.dt = childnode.InnerText;
-                                    if (childnode.Name == "auto1") Stat.Odincovo.auto1 = childnode.InnerText;
-                                    if (childnode.Name == "auto2") Stat.Odincovo.auto2 = childnode.InnerText;
-                                    if (childnode.Name == "autoplomb") Stat.Odincovo.autoplomb = childnode.InnerText;
-                                    break;
-                                case 9:
-                                    if (childnode.Name == "oooinn") Stat.Skladohnay.oooinn = childnode.InnerText;
-                                    if (childnode.Name == "fio") Stat.Skladohnay.fio = childnode.InnerText;
-                                    if (childnode.Name == "march") Stat.Skladohnay.march = childnode.InnerText;
-                                    if (childnode.Name == "phone") Stat.Skladohnay.phone = childnode.InnerText;
-                                    if (childnode.Name == "dt") Stat.Skladohnay.dt = childnode.InnerText;
-                                    if (childnode.Name == "auto1") Stat.Skladohnay.auto1 = childnode.InnerText;
-                                    if (childnode.Name == "auto2") Stat.Skladohnay.auto2 = childnode.InnerText;
-                                    if (childnode.Name == "autoplomb") Stat.Skladohnay.autoplomb = childnode.InnerText;
-                                    break;
-                                case 10:
-                                    if (childnode.Name == "oooinn") Stat.Pererva.oooinn = childnode.InnerText;
-                                    if (childnode.Name == "fio") Stat.Pererva.fio = childnode.InnerText;
-                                    if (childnode.Name == "march") Stat.Pererva.march = childnode.InnerText;
-                                    if (childnode.Name == "phone") Stat.Pererva.phone = childnode.InnerText;
-                                    if (childnode.Name == "dt") Stat.Pererva.dt = childnode.InnerText;
-                                    if (childnode.Name == "auto1") Stat.Pererva.auto1 = childnode.InnerText;
-                                    if (childnode.Name == "auto2") Stat.Pererva.auto2 = childnode.InnerText;
-                                    if (childnode.Name == "autoplomb") Stat.Pererva.autoplomb = childnode.InnerText;
-                                    break;
-                                case 11:
-                                    if (childnode.Name == "oooinn") Stat.BUhunskay.oooinn = childnode.InnerText;
-                                    if (childnode.Name == "fio") Stat.BUhunskay.fio = childnode.InnerText;
-                                    if (childnode.Name == "march") Stat.BUhunskay.march = childnode.InnerText;
-                                    if (childnode.Name == "phone") Stat.BUhunskay.phone = childnode.InnerText;
-                                    if (childnode.Name == "dt") Stat.BUhunskay.dt = childnode.InnerText;
-                                    if (childnode.Name == "auto1") Stat.BUhunskay.auto1 = childnode.InnerText;
-                                    if (childnode.Name == "auto2") Stat.BUhunskay.auto2 = childnode.InnerText;
-                                    if (childnode.Name == "autoplomb") Stat.BUhunskay.autoplomb = childnode.InnerText;
-                                    break;
-                                case 12:
-                                    if (childnode.Name == "oooinn") Stat.Egorevsk.oooinn = childnode.InnerText;
-                                    if (childnode.Name == "fio") Stat.Egorevsk.fio = childnode.InnerText;
-                                    if (childnode.Name == "march") Stat.Egorevsk.march = childnode.InnerText;
-                                    if (childnode.Name == "phone") Stat.Egorevsk.phone = childnode.InnerText;
-                                    if (childnode.Name == "dt") Stat.Egorevsk.dt = childnode.InnerText;
-                                    if (childnode.Name == "auto1") Stat.Egorevsk.auto1 = childnode.InnerText;
-                                    if (childnode.Name == "auto2") Stat.Egorevsk.auto2 = childnode.InnerText;
-                                    if (childnode.Name == "autoplomb") Stat.Egorevsk.autoplomb = childnode.InnerText;
-                                    break;
-                            }
-                        }
+                    // ----------------------------------
+                    // Если это список (pal, gm, mesh...)
+                    // ----------------------------------
+                    if (listMap.TryGetValue(name, out var listGetter))
+                    {
+                        listGetter(station).Add(value);
+                        continue;
                     }
                 }
-
-                new ToastContentBuilder()
-                        .AddArgument("action", "viewConversation")
-                        .AddArgument("conversationId", 9813)
-                        .AddText("Данные успешно импортированы.")
-                        .AddText($"Импортирование данных из файла {new Home().GetNameFile(Properties.Settings.Default.savePathFileDir)}.xml завершена без ошибок. Всего загружено {el} элементов таблиц.")
-                        .AddButton(new ToastButton().SetContent("OK"))
-                        .Show();
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
 
         static private void AddXmlElement(string str, string element, int i)
