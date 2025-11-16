@@ -8,56 +8,8 @@
         <view:Home />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type vm:HimkiVM}">
-        <views:Himki/>
+    <DataTemplate DataType="{x:Type vm:StationViewModel}">
+        <view:StationView />
     </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:MartaVM}">
-        <views:Marta />
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:PuhkinoVM}">
-        <views:Puhkino />
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:PrivolnayVM}">
-        <views:Privolnay />
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:VehkiVM}">
-        <views:Vehki />
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:RybinovayVM}">
-        <views:Rybinovay />
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:SharapovoVM}">
-        <view:Sharapovo />
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:HelkovskayVM}">
-        <views:Helkovskay />
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:OdincovoVM}">
-        <views:Odincovo />
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:SkladohnayVM}">
-        <views:Skladohnay />
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:PerervaVM}">
-        <views:Pererva />
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:BUhunskayVM}">
-        <views:BUhunskay />
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:EgorevskVM}">
-        <views:Egorevsk />
-    </DataTemplate>
-
+    
 </ResourceDictionary>

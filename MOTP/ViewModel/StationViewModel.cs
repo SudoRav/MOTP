@@ -3,11 +3,12 @@ using System;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 
-namespace MOTP.View
+namespace MOTP.ViewModel
 {
-    internal class StationViewModel : ViewModelBase
+    public class StationViewModel : ViewModelBase
     {
         // Ссылка на данные станции (из Stat.cs)
         public Stat.StationData Station { get; }
@@ -46,6 +47,7 @@ namespace MOTP.View
         public string DT { get => Station.dt; set { Station.dt = value; OnPropertyChanged(); } }
         public string Auto1 { get => Station.auto1; set { Station.auto1 = value; OnPropertyChanged(); } }
         public string Auto2 { get => Station.auto2; set { Station.auto2 = value; OnPropertyChanged(); } }
+        public string Autoplomb { get => Station.autoplomb; set { Station.autoplomb = value; OnPropertyChanged(); } }
         public string Sdach { get => Station.sdach; set { Station.sdach = value; OnPropertyChanged(); } }
         public string Poluch { get => Station.poluch; set { Station.poluch = value; OnPropertyChanged(); } }
 
@@ -72,9 +74,9 @@ namespace MOTP.View
 
 
             // Заглушки (в проекте можно связать с Home.Instance или навигацией)
-            OpenFormCommand = new RelayCommand(_ => OpenForm());
-            GenerateReportCommand = new RelayCommand(_ => GenerateReport());
-            OpenSettingsCommand = new RelayCommand(_ => OpenSettings());
+            OpenFormCommand = new RelayCommand(_ => FormOtch());
+            GenerateReportCommand = new RelayCommand(_ => OpenComp());
+            OpenSettingsCommand = new RelayCommand(_ => OpenSett());
         }
 
         private void AddEntry()
@@ -90,13 +92,9 @@ namespace MOTP.View
                 case 5: Station._listZas?.Add(EntryText); break; // гм(зас)
             }
 
-
-            // Сброс полей ввода
             EntryText = string.Empty;
             EntryPlomb = string.Empty;
 
-
-            // Сохранить изменения в Station
             PersistToStation();
         }
 
@@ -120,10 +118,18 @@ namespace MOTP.View
             Station._listCont = ContList.ToList();
         }
 
-        // Заглушки — интегрировать с существующими методами Home.* по желанию
-        private void OpenForm() { /* TODO: вызвать _home.OpenComp(...) */ }
-        private void GenerateReport() { /* TODO: вызвать _home.FormOtch(...) */ }
-        private void OpenSettings() { /* TODO: вызвать _home.OpenSett(...) */ }
+        private void FormOtch() 
+        {
+            MessageBox.Show("отчёт");
+        }
+        private void OpenComp() 
+        {
+            MessageBox.Show("документ");
+        }
+        private void OpenSett() 
+        {
+            MessageBox.Show("настройки");
+        }
         public void AddEntryFromKeyboard()
         {
             if (!string.IsNullOrWhiteSpace(EntryText))

@@ -20,7 +20,6 @@ using Microsoft.Toolkit.Uwp.Notifications;
 using System.Xml;
 using System.Threading.Tasks;
 using System.Threading;
-using Aspose.Html;
 using System.Net;
 
 namespace MOTP.View
@@ -176,7 +175,6 @@ namespace MOTP.View
             if (FindDubl(listPal, listGM, listMesh, listCont, listSave, listZas, nacl.Text, Properties.Settings.Default.multifind) && FindDubl(listPal, listGM, listMesh, listCont, listSave, listZas, plmb.Text, Properties.Settings.Default.multifind))
             {
                 stat.Add($"{prim} {nacl.Text.Trim()} {plmb.Text.Trim()}{dopstr}");
-                //list?.Items.Add($"{prim} {nacl.Text.Trim()} {plmb.Text.Trim()}{dopstr}");
             }
             else
             {
@@ -184,7 +182,6 @@ namespace MOTP.View
                 if (Properties.Settings.Default.adddubl)
                 {
                     stat.Add($"{prim} {nacl.Text.Trim()} {plmb.Text.Trim()}{dopstr}");
-                    //list?.Items.Add($"{prim} {nacl.Text.Trim()} {plmb.Text.Trim()}{dopstr}");
                 }
             }
 
@@ -388,9 +385,6 @@ namespace MOTP.View
             }
             else
             {
-                //не работает это дерьмо блять
-                //List<string>[] vars = [Stat.BUhunskay._listPal, Stat.BUhunskay._listGM, Stat.BUhunskay._listMesh, Stat.BUhunskay._listCont, Stat.BUhunskay._listSave, Stat.BUhunskay._listZas];
-
                 foreach (string str in Stat.BUhunskay._listPal) if (findstr != "") if (str.Contains(findstr)) return false;
                 foreach (string str in Stat.BUhunskay._listGM) if (findstr != "") if (str.Contains(findstr)) return false;
                 foreach (string str in Stat.BUhunskay._listMesh) if (findstr != "") if (str.Contains(findstr)) return false;
@@ -807,24 +801,8 @@ namespace MOTP.View
                     try { ws.Cell(FindValueWB(wb, "##MYFIO")).Value = Properties.Settings.Default.myFIO; } catch { }
                     try { ws.Cell(FindValueWB(wb, "##MYDOL")).Value = Properties.Settings.Default.myDOL; } catch { }
 
-                    //try { ws.Cell(FindValueWB(wb, "##AUTOPLMB")).Value = TB_Autoplomb.Text.Trim(); } catch { }
-
                     try { ws.Cell(FindValueWB(wb, "##AUTOPLMB")).Value = double.Parse(TB_Autoplomb.Text.Trim()); }
                     catch { ws.Cell(FindValueWB(wb, "##AUTOPLMB")).Value = TB_Autoplomb.Text.Trim(); }
-
-                    //string cargo = "";
-                    //if (listPal.Count > 0)
-                    //    cargo += $" {listPal.Count} - паллеты,";
-                    //if (listMesh.Count > 0)
-                    //    cargo += $" {listMesh.Count} - мешки,";
-                    //if (listCont.Count > 0)
-                    //    cargo += $" {listCont.Count} - контейнеры,";
-                    //if (listGM.Count > 0)
-                    //    cargo += $" {listGM.Count} - ГМы,";
-                    //if (listSave.Count > 0)
-                    //    cargo += $" {listSave.Count} - сейфпакеты,";
-                    //if (listZas.Count > 0)
-                    //    cargo += $" {listZas.Count} - засылы,";
 
                     string cargo = "";
                     if (listPal.Count > 0)
@@ -996,13 +974,8 @@ namespace MOTP.View
                         catch { }
                     }
 
-                    //ws.ActiveCell = ws.Cell("I4"); ; 
-
                     string pathFile = $@"{GetPathFile(Properties.Settings.Default.vbnPathFileDir)}[DTL] {TB_March.Text.Trim()}{GetExtFile(Properties.Settings.Default.vbnPathFileDir)}";
                     wb.SaveAs(pathFile);
-
-                    //MessageBox.Show("Запись успешно завершена.", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
-
                     new ToastContentBuilder()
                         .AddArgument("action", "viewConversation")
                         .AddArgument("conversationId", 9813)
@@ -1054,84 +1027,29 @@ namespace MOTP.View
             {
                 if (pages < 1)
                     pages = 1;
-
-                //Create a workbook
-
                 Workbook workbook = new Workbook();
-
-                //Load an Excel document
-
                 workbook.LoadFromFile(pathFile);
-
-                //Get the first worksheet
-
                 Worksheet worksheet = workbook.Worksheets[numws];
-
-                //Get the PageSetup object of the first worksheet
-
                 PageSetup pageSetup = worksheet.PageSetup;
-
-                //Set page margins
-
                 pageSetup.TopMargin = 0.3;
-
                 pageSetup.BottomMargin = 0.3;
-
                 pageSetup.LeftMargin = 0.3;
-
                 pageSetup.RightMargin = 0.3;
-
-                //Specify print area
-
                 switch (numws)
                 {
                     case 0: pageSetup.PrintArea = "A1: R95"; break;
                     case 1: pageSetup.PrintArea = "A1: G73"; break;
                     default: pageSetup.PrintArea = "A1: B2"; break;
                 }
-
-                //Specify title row
-
-                //pageSetup.PrintTitleRows = "$1:$2";
-
-                //Allow to print with row/column headings
-
                 pageSetup.IsPrintHeadings = true;
-
-                //Allow to print with gridlines
-
                 pageSetup.IsPrintGridlines = true;
-
-                //Allow to print comments as displayed on worksheet
-
                 pageSetup.PrintComments = PrintCommentType.InPlace;
-
-                //Set printing quality (dpi)
-
                 pageSetup.PrintQuality = 300;
-
-                //Allow to print worksheet in black & white mode
-
                 pageSetup.BlackAndWhite = true;
-
-                //Set the printing order
-
                 pageSetup.Order = OrderType.OverThenDown;
-
-                //Fit worksheet on one page
-
                 pageSetup.IsFitToPage = true;
-
-                //Get PrinterSettings from the workbook
-
                 PrinterSettings settings = workbook.PrintDocument.PrinterSettings;
-
-                //Specify printer name
-
                 settings.PrinterName = Properties.Settings.Default.printerName;
-
-                //Print the workbook
-
                 for (int i = 0; i < pages; i++)
                 {
                     workbook.PrintDocument.Print();
@@ -1392,128 +1310,128 @@ namespace MOTP.View
             {
                 string data = null;
 
-            data += "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" + "\n";
-            data += "<data>" + "\n";
+                data += "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" + "\n";
+                data += "<data>" + "\n";
 
-            for (int i = 0; i < 13; i++)
-            {
-                string name = "";
-                switch (i)
+                for (int i = 0; i < 13; i++)
                 {
-                    case 0: name = "Himki"; break;
-                    case 1: name = "Marta"; break;
-                    case 2: name = "Puhkino"; break;
-                    case 3: name = "Privolnay"; break;
-                    case 4: name = "Vehki"; break;
-                    case 5: name = "Rybinovay"; break;
-                    case 6: name = "Sharapovo"; break;
-                    case 7: name = "Helkovskay"; break;
-                    case 8: name = "Odincovo"; break;
-                    case 9: name = "Skladohnay"; break;
-                    case 10: name = "Pererva"; break;
-                    case 11: name = "BUhunskay"; break;
-                    case 12: name = "Egorevsk"; break;
-                    default: name = "none"; break;
-                }
+                    string name = "";
+                    switch (i)
+                    {
+                        case 0: name = "Himki"; break;
+                        case 1: name = "Marta"; break;
+                        case 2: name = "Puhkino"; break;
+                        case 3: name = "Privolnay"; break;
+                        case 4: name = "Vehki"; break;
+                        case 5: name = "Rybinovay"; break;
+                        case 6: name = "Sharapovo"; break;
+                        case 7: name = "Helkovskay"; break;
+                        case 8: name = "Odincovo"; break;
+                        case 9: name = "Skladohnay"; break;
+                        case 10: name = "Pererva"; break;
+                        case 11: name = "BUhunskay"; break;
+                        case 12: name = "Egorevsk"; break;
+                        default: name = "none"; break;
+                    }
 
-                data += $"<st name=\"{name}\">" + "\n";
+                    data += $"<st name=\"{name}\">" + "\n";
 
-                for (int j = 0; j < 6; j++)
-                {
-                    switch (j)
+                    for (int j = 0; j < 6; j++)
+                    {
+                        switch (j)
+                        {
+                            case 0:
+                                foreach (string item in Stat.Settings.arr[i][j])
+                                    data += $"<pal>{item.Trim()}</pal>" + "\n";
+                                break;
+                            case 1:
+                                foreach (string item in Stat.Settings.arr[i][j])
+                                    data += $"<gm>{item.Trim()}</gm>" + "\n";
+                                break;
+                            case 2:
+                                foreach (string item in Stat.Settings.arr[i][j])
+                                    data += $"<mesh>{item.Trim()}</mesh>" + "\n";
+                                break;
+                            case 3:
+                                foreach (string item in Stat.Settings.arr[i][j])
+                                    data += $"<cont>{item.Trim()}</cont>" + "\n";
+                                break;
+                            case 4:
+                                foreach (string item in Stat.Settings.arr[i][j])
+                                    data += $"<save>{item.Trim()}</save>" + "\n";
+                                break;
+                            case 5:
+                                foreach (string item in Stat.Settings.arr[i][j])
+                                    data += $"<zas>{item.Trim()}</zas>" + "\n";
+                                break;
+                        }
+                    }
+
+                    switch (i)
                     {
                         case 0:
-                            foreach (string item in Stat.Settings.arr[i][j])
-                                data += $"<pal>{item.Trim()}</pal>" + "\n";
+                            data += DataDataInp(Stat.Himki.oooinn, Stat.Himki.fio, Stat.Himki.march, Stat.Himki.phone, Stat.Himki.dt, Stat.Himki.auto1, Stat.Himki.auto2, Stat.Himki.autoplomb);
                             break;
                         case 1:
-                            foreach (string item in Stat.Settings.arr[i][j])
-                                data += $"<gm>{item.Trim()}</gm>" + "\n";
+                            data += DataDataInp(Stat.Marta.oooinn, Stat.Marta.fio, Stat.Marta.march, Stat.Marta.phone, Stat.Marta.dt, Stat.Marta.auto1, Stat.Marta.auto2, Stat.Marta.autoplomb);
                             break;
                         case 2:
-                            foreach (string item in Stat.Settings.arr[i][j])
-                                data += $"<mesh>{item.Trim()}</mesh>" + "\n";
+                            data += DataDataInp(Stat.Puhkino.oooinn, Stat.Puhkino.fio, Stat.Puhkino.march, Stat.Puhkino.phone, Stat.Puhkino.dt, Stat.Puhkino.auto1, Stat.Puhkino.auto2, Stat.Puhkino.autoplomb);
                             break;
                         case 3:
-                            foreach (string item in Stat.Settings.arr[i][j])
-                                data += $"<cont>{item.Trim()}</cont>" + "\n";
+                            data += DataDataInp(Stat.Privolnay.oooinn, Stat.Privolnay.fio, Stat.Privolnay.march, Stat.Privolnay.phone, Stat.Privolnay.dt, Stat.Privolnay.auto1, Stat.Privolnay.auto2, Stat.Privolnay.autoplomb);
                             break;
                         case 4:
-                            foreach (string item in Stat.Settings.arr[i][j])
-                                data += $"<save>{item.Trim()}</save>" + "\n";
+                            data += DataDataInp(Stat.Vehki.oooinn, Stat.Vehki.fio, Stat.Vehki.march, Stat.Vehki.phone, Stat.Vehki.dt, Stat.Vehki.auto1, Stat.Vehki.auto2, Stat.Vehki.autoplomb);
                             break;
                         case 5:
-                            foreach (string item in Stat.Settings.arr[i][j])
-                                data += $"<zas>{item.Trim()}</zas>" + "\n";
+                            data += DataDataInp(Stat.Rybinovay.oooinn, Stat.Rybinovay.fio, Stat.Rybinovay.march, Stat.Rybinovay.phone, Stat.Rybinovay.dt, Stat.Rybinovay.auto1, Stat.Rybinovay.auto2, Stat.Rybinovay.autoplomb);
+                            break;
+                        case 6:
+                            data += DataDataInp(Stat.Sharapovo.oooinn, Stat.Sharapovo.fio, Stat.Sharapovo.march, Stat.Sharapovo.phone, Stat.Sharapovo.dt, Stat.Sharapovo.auto1, Stat.Sharapovo.auto2, Stat.Sharapovo.autoplomb);
+                            break;
+                        case 7:
+                            data += DataDataInp(Stat.Helkovskay.oooinn, Stat.Helkovskay.fio, Stat.Helkovskay.march, Stat.Helkovskay.phone, Stat.Helkovskay.dt, Stat.Helkovskay.auto1, Stat.Helkovskay.auto2, Stat.Helkovskay.autoplomb);
+                            break;
+                        case 8:
+                            data += DataDataInp(Stat.Odincovo.oooinn, Stat.Odincovo.fio, Stat.Odincovo.march, Stat.Odincovo.phone, Stat.Odincovo.dt, Stat.Odincovo.auto1, Stat.Odincovo.auto2, Stat.Odincovo.autoplomb);
+                            break;
+                        case 9:
+                            data += DataDataInp(Stat.Skladohnay.oooinn, Stat.Skladohnay.fio, Stat.Skladohnay.march, Stat.Skladohnay.phone, Stat.Skladohnay.dt, Stat.Skladohnay.auto1, Stat.Skladohnay.auto2, Stat.Skladohnay.autoplomb);
+                            break;
+                        case 10:
+                            data += DataDataInp(Stat.Pererva.oooinn, Stat.Pererva.fio, Stat.Pererva.march, Stat.Pererva.phone, Stat.Pererva.dt, Stat.Pererva.auto1, Stat.Pererva.auto2, Stat.Pererva.autoplomb);
+                            break;
+                        case 11:
+                            data += DataDataInp(Stat.BUhunskay.oooinn, Stat.BUhunskay.fio, Stat.BUhunskay.march, Stat.BUhunskay.phone, Stat.BUhunskay.dt, Stat.BUhunskay.auto1, Stat.BUhunskay.auto2, Stat.BUhunskay.autoplomb);
+                            break;
+                        case 12:
+                            data += DataDataInp(Stat.Egorevsk.oooinn, Stat.Egorevsk.fio, Stat.Egorevsk.march, Stat.Egorevsk.phone, Stat.Egorevsk.dt, Stat.Egorevsk.auto1, Stat.Egorevsk.auto2, Stat.Egorevsk.autoplomb);
                             break;
                     }
+
+                    data += "</st>" + "\n";
                 }
 
-                switch (i)
-                {
-                    case 0:
-                        data += DataDataInp(Stat.Himki.oooinn, Stat.Himki.fio, Stat.Himki.march, Stat.Himki.phone, Stat.Himki.dt, Stat.Himki.auto1, Stat.Himki.auto2, Stat.Himki.autoplomb);
-                        break;
-                    case 1:
-                        data += DataDataInp(Stat.Marta.oooinn, Stat.Marta.fio, Stat.Marta.march, Stat.Marta.phone, Stat.Marta.dt, Stat.Marta.auto1, Stat.Marta.auto2, Stat.Marta.autoplomb);
-                        break;
-                    case 2:
-                        data += DataDataInp(Stat.Puhkino.oooinn, Stat.Puhkino.fio, Stat.Puhkino.march, Stat.Puhkino.phone, Stat.Puhkino.dt, Stat.Puhkino.auto1, Stat.Puhkino.auto2, Stat.Puhkino.autoplomb);
-                        break;
-                    case 3:
-                        data += DataDataInp(Stat.Privolnay.oooinn, Stat.Privolnay.fio, Stat.Privolnay.march, Stat.Privolnay.phone, Stat.Privolnay.dt, Stat.Privolnay.auto1, Stat.Privolnay.auto2, Stat.Privolnay.autoplomb);
-                        break;
-                    case 4:
-                        data += DataDataInp(Stat.Vehki.oooinn, Stat.Vehki.fio, Stat.Vehki.march, Stat.Vehki.phone, Stat.Vehki.dt, Stat.Vehki.auto1, Stat.Vehki.auto2, Stat.Vehki.autoplomb);
-                        break;
-                    case 5:
-                        data += DataDataInp(Stat.Rybinovay.oooinn, Stat.Rybinovay.fio, Stat.Rybinovay.march, Stat.Rybinovay.phone, Stat.Rybinovay.dt, Stat.Rybinovay.auto1, Stat.Rybinovay.auto2, Stat.Rybinovay.autoplomb);
-                        break;
-                    case 6:
-                        data += DataDataInp(Stat.Sharapovo.oooinn, Stat.Sharapovo.fio, Stat.Sharapovo.march, Stat.Sharapovo.phone, Stat.Sharapovo.dt, Stat.Sharapovo.auto1, Stat.Sharapovo.auto2, Stat.Sharapovo.autoplomb);
-                        break;
-                    case 7:
-                        data += DataDataInp(Stat.Helkovskay.oooinn, Stat.Helkovskay.fio, Stat.Helkovskay.march, Stat.Helkovskay.phone, Stat.Helkovskay.dt, Stat.Helkovskay.auto1, Stat.Helkovskay.auto2, Stat.Helkovskay.autoplomb);
-                        break;
-                    case 8:
-                        data += DataDataInp(Stat.Odincovo.oooinn, Stat.Odincovo.fio, Stat.Odincovo.march, Stat.Odincovo.phone, Stat.Odincovo.dt, Stat.Odincovo.auto1, Stat.Odincovo.auto2, Stat.Odincovo.autoplomb);
-                        break;
-                    case 9:
-                        data += DataDataInp(Stat.Skladohnay.oooinn, Stat.Skladohnay.fio, Stat.Skladohnay.march, Stat.Skladohnay.phone, Stat.Skladohnay.dt, Stat.Skladohnay.auto1, Stat.Skladohnay.auto2, Stat.Skladohnay.autoplomb);
-                        break;
-                    case 10:
-                        data += DataDataInp(Stat.Pererva.oooinn, Stat.Pererva.fio, Stat.Pererva.march, Stat.Pererva.phone, Stat.Pererva.dt, Stat.Pererva.auto1, Stat.Pererva.auto2, Stat.Pererva.autoplomb);
-                        break;
-                    case 11:
-                        data += DataDataInp(Stat.BUhunskay.oooinn, Stat.BUhunskay.fio, Stat.BUhunskay.march, Stat.BUhunskay.phone, Stat.BUhunskay.dt, Stat.BUhunskay.auto1, Stat.BUhunskay.auto2, Stat.BUhunskay.autoplomb);
-                        break;
-                    case 12:
-                        data += DataDataInp(Stat.Egorevsk.oooinn, Stat.Egorevsk.fio, Stat.Egorevsk.march, Stat.Egorevsk.phone, Stat.Egorevsk.dt, Stat.Egorevsk.auto1, Stat.Egorevsk.auto2, Stat.Egorevsk.autoplomb);
-                        break;
-                }
+                data += "</data>" + "\n";
 
-                data += "</st>" + "\n";
-            }
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(data);
 
-            data += "</data>" + "\n";
+                string pathdata = Path.Combine(Environment.CurrentDirectory + $@"\Saves\{LineAdder(DateTime.Now.Day.ToString(), 2)}-{LineAdder(DateTime.Now.Month.ToString(), 2)}-{LineAdder(DateTime.Now.Year.ToString(), 4)}");
+                string filename = $"{LineAdder(DateTime.Now.Hour.ToString(), 2)}-{LineAdder(DateTime.Now.Minute.ToString(), 2)}-{LineAdder(DateTime.Now.Second.ToString(), 2)}{dopstr}.xml";
 
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(data);
+                if (!Directory.Exists(pathdata))
+                    Directory.CreateDirectory(pathdata);
+                xmlDoc.Save($"{pathdata}\\{filename}");
 
-            string pathdata = Path.Combine(Environment.CurrentDirectory + $@"\Saves\{LineAdder(DateTime.Now.Day.ToString(), 2)}-{LineAdder(DateTime.Now.Month.ToString(), 2)}-{LineAdder(DateTime.Now.Year.ToString(), 4)}");
-            string filename = $"{LineAdder(DateTime.Now.Hour.ToString(), 2)}-{LineAdder(DateTime.Now.Minute.ToString(), 2)}-{LineAdder(DateTime.Now.Second.ToString(), 2)}{dopstr}.xml";
-
-            if (!Directory.Exists(pathdata))
-                Directory.CreateDirectory(pathdata);
-            xmlDoc.Save($"{pathdata}\\{filename}");
-
-            new ToastContentBuilder()
-                        .AddArgument("action", "viewConversation")
-                        .AddArgument("conversationId", 9813)
-                        .AddText("Данные успешно сохранены.")
-                        .AddText($"Сохранение данных из MOTP проведено без ошибок. Все данные были сохранены в файле {new Home().GetNameFile(filename)}.xml в папке проекта.")
-                        .AddButton(new ToastButton().SetContent("OK"))
-                        .Show();
+                new ToastContentBuilder()
+                            .AddArgument("action", "viewConversation")
+                            .AddArgument("conversationId", 9813)
+                            .AddText("Данные успешно сохранены.")
+                            .AddText($"Сохранение данных из MOTP проведено без ошибок. Все данные были сохранены в файле {new Home().GetNameFile(filename)}.xml в папке проекта.")
+                            .AddButton(new ToastButton().SetContent("OK"))
+                            .Show();
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
@@ -1552,7 +1470,6 @@ namespace MOTP.View
                 OpenFileDialog dialog = new OpenFileDialog
                 {
                     InitialDirectory = Environment.CurrentDirectory,
-                    //InitialDirectory = Properties.Settings.Default.savePathFileDir,
                     CheckPathExists = true,
                     Filter = "Xml Files(*.xml)|*.xml|All Files(*.*)|*.*"
                 };
@@ -1599,8 +1516,6 @@ namespace MOTP.View
                     foreach (XmlElement xnode in xroot)
                     {
                         i++;
-                        //XmlNode attr = xnode.Attributes.GetNamedItem("name");
-                        //MessageBox.Show($"{attr?.Value} {xnode.ChildNodes.Count.ToString()}");
 
                         foreach (XmlNode childnode in xnode.ChildNodes)
                         {
@@ -1828,7 +1743,7 @@ namespace MOTP.View
         public static string LineAdder(string str, int length, string add = "0")
         {
             int leng = length - str.Length;
-            
+
             string nulls = "";
             for (int i = 0; i < leng; i++)
                 nulls += add;
