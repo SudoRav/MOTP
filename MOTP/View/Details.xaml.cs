@@ -153,44 +153,44 @@ namespace MOTP.View
 
         private void TBo_Com_Loaded(object sender, RoutedEventArgs e)
         {
-            switch (_numstation)
-            {
-                case 1: TBo_Com.Text = Properties.Settings.Default.ComHimki; break;
-                case 2: TBo_Com.Text = Properties.Settings.Default.ComMarta; break;
-                case 3: TBo_Com.Text = Properties.Settings.Default.ComPuhkino; break;
-                case 4: TBo_Com.Text = Properties.Settings.Default.ComPrivolnay; break;
-                case 5: TBo_Com.Text = Properties.Settings.Default.ComVehki; break;
-                case 6: TBo_Com.Text = Properties.Settings.Default.ComRybinovay; break;
-                case 7: TBo_Com.Text = Properties.Settings.Default.ComSharapovo; break;
-                case 8: TBo_Com.Text = Properties.Settings.Default.ComHelkovskay; break;
-                case 9: TBo_Com.Text = Properties.Settings.Default.ComOdincovo; break;
-                case 10: TBo_Com.Text = Properties.Settings.Default.ComSkladohnay; break;
-                case 11: TBo_Com.Text = Properties.Settings.Default.ComPererva; break;
-                case 12: TBo_Com.Text = Properties.Settings.Default.ComBUhunskay; break;
-                case 13: TBo_Com.Text = Properties.Settings.Default.ComEgorevsk; break;
-                default: TBo_Com.Text = ""; break;
-            }
+            //switch (_numstation)
+            //{
+            //    case 1: TBo_Com.Text = Properties.Settings.Default.ComHimki; break;
+            //    case 2: TBo_Com.Text = Properties.Settings.Default.ComMarta; break;
+            //    case 3: TBo_Com.Text = Properties.Settings.Default.ComPuhkino; break;
+            //    case 4: TBo_Com.Text = Properties.Settings.Default.ComPrivolnay; break;
+            //    case 5: TBo_Com.Text = Properties.Settings.Default.ComVehki; break;
+            //    case 6: TBo_Com.Text = Properties.Settings.Default.ComRybinovay; break;
+            //    case 7: TBo_Com.Text = Properties.Settings.Default.ComSharapovo; break;
+            //    case 8: TBo_Com.Text = Properties.Settings.Default.ComHelkovskay; break;
+            //    case 9: TBo_Com.Text = Properties.Settings.Default.ComOdincovo; break;
+            //    case 10: TBo_Com.Text = Properties.Settings.Default.ComSkladohnay; break;
+            //    case 11: TBo_Com.Text = Properties.Settings.Default.ComPererva; break;
+            //    case 12: TBo_Com.Text = Properties.Settings.Default.ComBUhunskay; break;
+            //    case 13: TBo_Com.Text = Properties.Settings.Default.ComEgorevsk; break;
+            //    default: TBo_Com.Text = ""; break;
+            //}
         }
 
         private void TBo_Com_LostFocus(object sender, RoutedEventArgs e)
         {
-            switch (_numstation)
-            {
-                case 1: Properties.Settings.Default.ComHimki = TBo_Com.Text; break;
-                case 2: Properties.Settings.Default.ComMarta = TBo_Com.Text; break;
-                case 3: Properties.Settings.Default.ComPuhkino = TBo_Com.Text; break;
-                case 4: Properties.Settings.Default.ComPrivolnay = TBo_Com.Text; break;
-                case 5: Properties.Settings.Default.ComVehki = TBo_Com.Text; break;
-                case 6: Properties.Settings.Default.ComRybinovay = TBo_Com.Text; break;
-                case 7: Properties.Settings.Default.ComSharapovo = TBo_Com.Text; break;
-                case 8: Properties.Settings.Default.ComHelkovskay = TBo_Com.Text; break;
-                case 9: Properties.Settings.Default.ComOdincovo = TBo_Com.Text; break;
-                case 10: Properties.Settings.Default.ComSkladohnay = TBo_Com.Text; break;
-                case 11: Properties.Settings.Default.ComPererva = TBo_Com.Text; break;
-                case 12: Properties.Settings.Default.ComBUhunskay = TBo_Com.Text; break;
-                case 13: Properties.Settings.Default.ComEgorevsk = TBo_Com.Text; break;
-                default: break;
-            }
+            //switch (_numstation)
+            //{
+            //    case 1: Properties.Settings.Default.ComHimki = TBo_Com.Text; break;
+            //    case 2: Properties.Settings.Default.ComMarta = TBo_Com.Text; break;
+            //    case 3: Properties.Settings.Default.ComPuhkino = TBo_Com.Text; break;
+            //    case 4: Properties.Settings.Default.ComPrivolnay = TBo_Com.Text; break;
+            //    case 5: Properties.Settings.Default.ComVehki = TBo_Com.Text; break;
+            //    case 6: Properties.Settings.Default.ComRybinovay = TBo_Com.Text; break;
+            //    case 7: Properties.Settings.Default.ComSharapovo = TBo_Com.Text; break;
+            //    case 8: Properties.Settings.Default.ComHelkovskay = TBo_Com.Text; break;
+            //    case 9: Properties.Settings.Default.ComOdincovo = TBo_Com.Text; break;
+            //    case 10: Properties.Settings.Default.ComSkladohnay = TBo_Com.Text; break;
+            //    case 11: Properties.Settings.Default.ComPererva = TBo_Com.Text; break;
+            //    case 12: Properties.Settings.Default.ComBUhunskay = TBo_Com.Text; break;
+            //    case 13: Properties.Settings.Default.ComEgorevsk = TBo_Com.Text; break;
+            //    default: break;
+            //}
         }
     }
 }

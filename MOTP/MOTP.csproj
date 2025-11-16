@@ -83,28 +83,20 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Stat\Stat.cs" />
     <Compile Include="Utilities\Btn.cs" />
     <Compile Include="Utilities\Observer.cs" />
     <Compile Include="Utilities\RelayCommand.cs" />
     <Compile Include="Utilities\ViewModelBase.cs" />
-    <Compile Include="ViewModel\BUhunskayVM.cs" />
-    <Compile Include="ViewModel\EgorevskVM.cs" />
-    <Compile Include="ViewModel\HelkovskayVM.cs" />
-    <Compile Include="ViewModel\HimkiVM.cs" />
     <Compile Include="ViewModel\HomeVM.cs" />
-    <Compile Include="ViewModel\MartaVM.cs" />
     <Compile Include="ViewModel\NavigationVM.cs" />
-    <Compile Include="ViewModel\OdincovoVM.cs" />
     <Compile Include="ViewModel\PatsVM.cs" />
     <Compile Include="ViewModel\PatternsVM.cs" />
-    <Compile Include="ViewModel\PerervaVM.cs" />
-    <Compile Include="ViewModel\PrivolnayVM.cs" />
-    <Compile Include="ViewModel\PuhkinoVM.cs" />
-    <Compile Include="ViewModel\RybinovayVM.cs" />
-    <Compile Include="ViewModel\SharapovoVM.cs" />
-    <Compile Include="ViewModel\SkladohnayVM.cs" />
-    <Compile Include="ViewModel\VehkiVM.cs" />
     <Compile Include="View\Comp.xaml.cs">
       <DependentUpon>Comp.xaml</DependentUpon>
     </Compile>
@@ -125,9 +117,6 @@
     </Compile>
     <Compile Include="View\Sett.xaml.cs">
       <DependentUpon>Sett.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\Stations\BUhunskay.xaml.cs">
-      <DependentUpon>BUhunskay.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\StationView.xaml.cs">
       <DependentUpon>StationView.xaml</DependentUpon>
@@ -197,10 +186,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Stations\BUhunskay.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\StationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -210,11 +195,6 @@
     <Compile Include="Model\PageModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

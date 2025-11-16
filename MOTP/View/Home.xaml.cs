@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Drawing.Printing;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -1310,134 +1311,82 @@ namespace MOTP.View
         {
             try
             {
-                string data = null;
+                string[] stationNames =
+                { "Himki", "Marta", "Puhkino", "Privolnay", "Vehki", "Rybinovay",
+          "Sharapovo", "Helkovskay", "Odincovo", "Skladohnay", "Pererva",
+          "BUhunskay", "Egorevsk" };
 
-                data += "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" + "\n";
-                data += "<data>" + "\n";
+                string[] tags = { "pal", "gm", "mesh", "cont", "save", "zas" };
 
-                for (int i = 0; i < 13; i++)
+                var sb = new StringBuilder();
+                sb.AppendLine("<?xml version=\"1.0\" encoding=\"utf-8\" ?>");
+                sb.AppendLine("<data>");
+
+                for (int i = 0; i < stationNames.Length; i++)
                 {
-                    string name = "";
-                    switch (i)
+                    sb.AppendLine($"  <st name=\"{stationNames[i]}\">");
+
+                    for (int j = 0; j < tags.Length; j++)
                     {
-                        case 0: name = "Himki"; break;
-                        case 1: name = "Marta"; break;
-                        case 2: name = "Puhkino"; break;
-                        case 3: name = "Privolnay"; break;
-                        case 4: name = "Vehki"; break;
-                        case 5: name = "Rybinovay"; break;
-                        case 6: name = "Sharapovo"; break;
-                        case 7: name = "Helkovskay"; break;
-                        case 8: name = "Odincovo"; break;
-                        case 9: name = "Skladohnay"; break;
-                        case 10: name = "Pererva"; break;
-                        case 11: name = "BUhunskay"; break;
-                        case 12: name = "Egorevsk"; break;
-                        default: name = "none"; break;
+                        foreach (string item in Stat.Settings.arr[i][j])
+                            sb.AppendLine($"    <{tags[j]}>{item.Trim()}</{tags[j]}>");
                     }
 
-                    data += $"<st name=\"{name}\">" + "\n";
+                    // Получаем данные для конкретной станции через метод
+                    sb.AppendLine(GetStationData(i));
 
-                    for (int j = 0; j < 6; j++)
-                    {
-                        switch (j)
-                        {
-                            case 0:
-                                foreach (string item in Stat.Settings.arr[i][j])
-                                    data += $"<pal>{item.Trim()}</pal>" + "\n";
-                                break;
-                            case 1:
-                                foreach (string item in Stat.Settings.arr[i][j])
-                                    data += $"<gm>{item.Trim()}</gm>" + "\n";
-                                break;
-                            case 2:
-                                foreach (string item in Stat.Settings.arr[i][j])
-                                    data += $"<mesh>{item.Trim()}</mesh>" + "\n";
-                                break;
-                            case 3:
-                                foreach (string item in Stat.Settings.arr[i][j])
-                                    data += $"<cont>{item.Trim()}</cont>" + "\n";
-                                break;
-                            case 4:
-                                foreach (string item in Stat.Settings.arr[i][j])
-                                    data += $"<save>{item.Trim()}</save>" + "\n";
-                                break;
-                            case 5:
-                                foreach (string item in Stat.Settings.arr[i][j])
-                                    data += $"<zas>{item.Trim()}</zas>" + "\n";
-                                break;
-                        }
-                    }
-
-                    switch (i)
-                    {
-                        case 0:
-                            data += DataDataInp(Stat.Himki.oooinn, Stat.Himki.fio, Stat.Himki.march, Stat.Himki.phone, Stat.Himki.dt, Stat.Himki.auto1, Stat.Himki.auto2, Stat.Himki.autoplomb);
-                            break;
-                        case 1:
-                            data += DataDataInp(Stat.Marta.oooinn, Stat.Marta.fio, Stat.Marta.march, Stat.Marta.phone, Stat.Marta.dt, Stat.Marta.auto1, Stat.Marta.auto2, Stat.Marta.autoplomb);
-                            break;
-                        case 2:
-                            data += DataDataInp(Stat.Puhkino.oooinn, Stat.Puhkino.fio, Stat.Puhkino.march, Stat.Puhkino.phone, Stat.Puhkino.dt, Stat.Puhkino.auto1, Stat.Puhkino.auto2, Stat.Puhkino.autoplomb);
-                            break;
-                        case 3:
-                            data += DataDataInp(Stat.Privolnay.oooinn, Stat.Privolnay.fio, Stat.Privolnay.march, Stat.Privolnay.phone, Stat.Privolnay.dt, Stat.Privolnay.auto1, Stat.Privolnay.auto2, Stat.Privolnay.autoplomb);
-                            break;
-                        case 4:
-                            data += DataDataInp(Stat.Vehki.oooinn, Stat.Vehki.fio, Stat.Vehki.march, Stat.Vehki.phone, Stat.Vehki.dt, Stat.Vehki.auto1, Stat.Vehki.auto2, Stat.Vehki.autoplomb);
-                            break;
-                        case 5:
-                            data += DataDataInp(Stat.Rybinovay.oooinn, Stat.Rybinovay.fio, Stat.Rybinovay.march, Stat.Rybinovay.phone, Stat.Rybinovay.dt, Stat.Rybinovay.auto1, Stat.Rybinovay.auto2, Stat.Rybinovay.autoplomb);
-                            break;
-                        case 6:
-                            data += DataDataInp(Stat.Sharapovo.oooinn, Stat.Sharapovo.fio, Stat.Sharapovo.march, Stat.Sharapovo.phone, Stat.Sharapovo.dt, Stat.Sharapovo.auto1, Stat.Sharapovo.auto2, Stat.Sharapovo.autoplomb);
-                            break;
-                        case 7:
-                            data += DataDataInp(Stat.Helkovskay.oooinn, Stat.Helkovskay.fio, Stat.Helkovskay.march, Stat.Helkovskay.phone, Stat.Helkovskay.dt, Stat.Helkovskay.auto1, Stat.Helkovskay.auto2, Stat.Helkovskay.autoplomb);
-                            break;
-                        case 8:
-                            data += DataDataInp(Stat.Odincovo.oooinn, Stat.Odincovo.fio, Stat.Odincovo.march, Stat.Odincovo.phone, Stat.Odincovo.dt, Stat.Odincovo.auto1, Stat.Odincovo.auto2, Stat.Odincovo.autoplomb);
-                            break;
-                        case 9:
-                            data += DataDataInp(Stat.Skladohnay.oooinn, Stat.Skladohnay.fio, Stat.Skladohnay.march, Stat.Skladohnay.phone, Stat.Skladohnay.dt, Stat.Skladohnay.auto1, Stat.Skladohnay.auto2, Stat.Skladohnay.autoplomb);
-                            break;
-                        case 10:
-                            data += DataDataInp(Stat.Pererva.oooinn, Stat.Pererva.fio, Stat.Pererva.march, Stat.Pererva.phone, Stat.Pererva.dt, Stat.Pererva.auto1, Stat.Pererva.auto2, Stat.Pererva.autoplomb);
-                            break;
-                        case 11:
-                            data += DataDataInp(Stat.BUhunskay.oooinn, Stat.BUhunskay.fio, Stat.BUhunskay.march, Stat.BUhunskay.phone, Stat.BUhunskay.dt, Stat.BUhunskay.auto1, Stat.BUhunskay.auto2, Stat.BUhunskay.autoplomb);
-                            break;
-                        case 12:
-                            data += DataDataInp(Stat.Egorevsk.oooinn, Stat.Egorevsk.fio, Stat.Egorevsk.march, Stat.Egorevsk.phone, Stat.Egorevsk.dt, Stat.Egorevsk.auto1, Stat.Egorevsk.auto2, Stat.Egorevsk.autoplomb);
-                            break;
-                    }
-
-                    data += "</st>" + "\n";
+                    sb.AppendLine("  </st>");
                 }
 
-                data += "</data>" + "\n";
+                sb.AppendLine("</data>");
 
                 XmlDocument xmlDoc = new XmlDocument();
-                xmlDoc.LoadXml(data);
+                xmlDoc.LoadXml(sb.ToString());
 
-                string pathdata = Path.Combine(Environment.CurrentDirectory + $@"\Saves\{LineAdder(DateTime.Now.Day.ToString(), 2)}-{LineAdder(DateTime.Now.Month.ToString(), 2)}-{LineAdder(DateTime.Now.Year.ToString(), 4)}");
+                string pathdata = Path.Combine(Environment.CurrentDirectory, "Saves",
+                    $"{LineAdder(DateTime.Now.Day.ToString(), 2)}-{LineAdder(DateTime.Now.Month.ToString(), 2)}-{LineAdder(DateTime.Now.Year.ToString(), 4)}");
                 string filename = $"{LineAdder(DateTime.Now.Hour.ToString(), 2)}-{LineAdder(DateTime.Now.Minute.ToString(), 2)}-{LineAdder(DateTime.Now.Second.ToString(), 2)}{dopstr}.xml";
 
                 if (!Directory.Exists(pathdata))
                     Directory.CreateDirectory(pathdata);
-                xmlDoc.Save($"{pathdata}\\{filename}");
+
+                xmlDoc.Save(Path.Combine(pathdata, filename));
 
                 new ToastContentBuilder()
-                            .AddArgument("action", "viewConversation")
-                            .AddArgument("conversationId", 9813)
-                            .AddText("Данные успешно сохранены.")
-                            .AddText($"Сохранение данных из MOTP проведено без ошибок. Все данные были сохранены в файле {new Home().GetNameFile(filename)}.xml в папке проекта.")
-                            .AddButton(new ToastButton().SetContent("OK"))
-                            .Show();
+                    .AddArgument("action", "viewConversation")
+                    .AddArgument("conversationId", 9813)
+                    .AddText("Данные успешно сохранены.")
+                    .AddText($"Сохранение данных из MOTP проведено без ошибок. Все данные были сохранены в файле {new Home().GetNameFile(filename)}.xml в папке проекта.")
+                    .AddButton(new ToastButton().SetContent("OK"))
+                    .Show();
             }
-            catch (Exception ex) { MessageBox.Show(ex.Message); }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
+        // Метод для получения данных DataDataInp для каждой станции
+        static string GetStationData(int index)
+        {
+            return index switch
+            {
+                0 => DataDataInp(Stat.Himki.oooinn, Stat.Himki.fio, Stat.Himki.march, Stat.Himki.phone, Stat.Himki.dt, Stat.Himki.auto1, Stat.Himki.auto2, Stat.Himki.autoplomb),
+                1 => DataDataInp(Stat.Marta.oooinn, Stat.Marta.fio, Stat.Marta.march, Stat.Marta.phone, Stat.Marta.dt, Stat.Marta.auto1, Stat.Marta.auto2, Stat.Marta.autoplomb),
+                2 => DataDataInp(Stat.Puhkino.oooinn, Stat.Puhkino.fio, Stat.Puhkino.march, Stat.Puhkino.phone, Stat.Puhkino.dt, Stat.Puhkino.auto1, Stat.Puhkino.auto2, Stat.Puhkino.autoplomb),
+                3 => DataDataInp(Stat.Privolnay.oooinn, Stat.Privolnay.fio, Stat.Privolnay.march, Stat.Privolnay.phone, Stat.Privolnay.dt, Stat.Privolnay.auto1, Stat.Privolnay.auto2, Stat.Privolnay.autoplomb),
+                4 => DataDataInp(Stat.Vehki.oooinn, Stat.Vehki.fio, Stat.Vehki.march, Stat.Vehki.phone, Stat.Vehki.dt, Stat.Vehki.auto1, Stat.Vehki.auto2, Stat.Vehki.autoplomb),
+                5 => DataDataInp(Stat.Rybinovay.oooinn, Stat.Rybinovay.fio, Stat.Rybinovay.march, Stat.Rybinovay.phone, Stat.Rybinovay.dt, Stat.Rybinovay.auto1, Stat.Rybinovay.auto2, Stat.Rybinovay.autoplomb),
+                6 => DataDataInp(Stat.Sharapovo.oooinn, Stat.Sharapovo.fio, Stat.Sharapovo.march, Stat.Sharapovo.phone, Stat.Sharapovo.dt, Stat.Sharapovo.auto1, Stat.Sharapovo.auto2, Stat.Sharapovo.autoplomb),
+                7 => DataDataInp(Stat.Helkovskay.oooinn, Stat.Helkovskay.fio, Stat.Helkovskay.march, Stat.Helkovskay.phone, Stat.Helkovskay.dt, Stat.Helkovskay.auto1, Stat.Helkovskay.auto2, Stat.Helkovskay.autoplomb),
+                8 => DataDataInp(Stat.Odincovo.oooinn, Stat.Odincovo.fio, Stat.Odincovo.march, Stat.Odincovo.phone, Stat.Odincovo.dt, Stat.Odincovo.auto1, Stat.Odincovo.auto2, Stat.Odincovo.autoplomb),
+                9 => DataDataInp(Stat.Skladohnay.oooinn, Stat.Skladohnay.fio, Stat.Skladohnay.march, Stat.Skladohnay.phone, Stat.Skladohnay.dt, Stat.Skladohnay.auto1, Stat.Skladohnay.auto2, Stat.Skladohnay.autoplomb),
+                10 => DataDataInp(Stat.Pererva.oooinn, Stat.Pererva.fio, Stat.Pererva.march, Stat.Pererva.phone, Stat.Pererva.dt, Stat.Pererva.auto1, Stat.Pererva.auto2, Stat.Pererva.autoplomb),
+                11 => DataDataInp(Stat.BUhunskay.oooinn, Stat.BUhunskay.fio, Stat.BUhunskay.march, Stat.BUhunskay.phone, Stat.BUhunskay.dt, Stat.BUhunskay.auto1, Stat.BUhunskay.auto2, Stat.BUhunskay.autoplomb),
+                12 => DataDataInp(Stat.Egorevsk.oooinn, Stat.Egorevsk.fio, Stat.Egorevsk.march, Stat.Egorevsk.phone, Stat.Egorevsk.dt, Stat.Egorevsk.auto1, Stat.Egorevsk.auto2, Stat.Egorevsk.autoplomb),
+                _ => "",
+            };
+        }
         static private string DataDataInp(string oooinn, string fio, string march, string phone, string dt, string auto1, string auto2, string autoplomb)
         {
             string str = "";
@@ -1462,106 +1411,111 @@ namespace MOTP.View
             return str;
         }
 
-        // =============================================================
-        // Таблица всех станций в правильном порядке
-        // =============================================================
-        private static readonly StationData[] Stations =
+        static private void LoadData()
         {
-    Himki.Data,
-    Marta.Data,
-    Puhkino.Data,
-    Privolnay.Data,
-    Vehki.Data,
-    Rybinovay.Data,
-    Sharapovo.Data,
-    Helkovskay.Data,
-    Odincovo.Data,
-    Skladohnay.Data,
-    Pererva.Data,
-    BUhunskay.Data,
-    Egorevsk.Data
-};
-
-        // =============================================================
-        // Карта свойств StationData (строковые поля)
-        // =============================================================
-        private static readonly Dictionary<string, Action<StationData, string>> fieldMap =
-            new()
-            {
-                ["oooinn"] = (s, v) => s.oooinn = v,
-                ["fio"] = (s, v) => s.fio = v,
-                ["march"] = (s, v) => s.march = v,
-                ["phone"] = (s, v) => s.phone = v,
-                ["dt"] = (s, v) => s.dt = v,
-                ["auto1"] = (s, v) => s.auto1 = v,
-                ["auto2"] = (s, v) => s.auto2 = v,
-                ["autoplomb"] = (s, v) => s.autoplomb = v,
-                ["sdach"] = (s, v) => s.sdach = v,
-                ["poluch"] = (s, v) => s.poluch = v,
-                ["ts"] = (s, v) => s.ts = v,
-            };
-
-        // =============================================================
-        // Карта списков (pal, gm, mesh, cont, save, zas)
-        // =============================================================
-        private static readonly Dictionary<string, Func<StationData, List<string>>> listMap =
-            new()
-            {
-                ["pal"] = s => s._listPal,
-                ["gm"] = s => s._listGM,
-                ["mesh"] = s => s._listMesh,
-                ["cont"] = s => s._listCont,
-                ["save"] = s => s._listSave,
-                ["zas"] = s => s._listZas
-            };
-
-        // =============================================================
-        // ГЛАВНЫЙ МЕТОД: LoadData
-        // =============================================================
-        public void LoadData(string xmlPath)
-        {
-            XmlDocument xDoc = new();
-            xDoc.Load(xmlPath);
-
-            XmlElement xroot = xDoc.DocumentElement;
-            if (xroot == null)
+            if (MessageBox.Show("Импортировать данные?\nЭто приведёт к удалению внесённых данных и замене их новыми из файла!",
+                "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes)
                 return;
 
-            int stationIndex = -1;
-
-            foreach (XmlNode stationNode in xroot)
+            try
             {
-                stationIndex++;
-                if (stationIndex >= Stations.Length)
-                    break;
-
-                StationData station = Stations[stationIndex];
-
-                foreach (XmlNode child in stationNode.ChildNodes)
+                OpenFileDialog dialog = new OpenFileDialog
                 {
-                    string name = child.Name.ToLower();
-                    string value = child.InnerText;
+                    InitialDirectory = Environment.CurrentDirectory,
+                    CheckPathExists = true,
+                    Filter = "Xml Files(*.xml)|*.xml|All Files(*.*)|*.*",
+                    FileName = Properties.Settings.Default.savePathFileDir != " " ? Properties.Settings.Default.savePathFileDir : ""
+                };
 
-                    // ----------------------------------
-                    // Если это строковое поле (fio, oooinn...)
-                    // ----------------------------------
-                    if (fieldMap.TryGetValue(name, out var setter))
-                    {
-                        setter(station, value);
-                        continue;
-                    }
+                if (dialog.ShowDialog() != true) return;
 
-                    // ----------------------------------
-                    // Если это список (pal, gm, mesh...)
-                    // ----------------------------------
-                    if (listMap.TryGetValue(name, out var listGetter))
+                Properties.Settings.Default.savePathFileDir = dialog.FileName;
+                Properties.Settings.Default.Save();
+
+                XmlDocument xdoc = new XmlDocument();
+                xdoc.Load(Properties.Settings.Default.savePathFileDir);
+
+                XmlElement xroot = xdoc.DocumentElement;
+
+                // Все станции в массив для циклической обработки
+                var stations = new[]
+                {
+            Stat.Himki.Data, Stat.Marta.Data, Stat.Puhkino.Data, Stat.Privolnay.Data,
+            Stat.Vehki.Data, Stat.Rybinovay.Data, Stat.Sharapovo.Data, Stat.Helkovskay.Data,
+            Stat.Odincovo.Data, Stat.Skladohnay.Data, Stat.Pererva.Data, Stat.BUhunskay.Data, Stat.Egorevsk.Data
+        };
+
+                // Очистка всех списков
+                foreach (var arrRow in Stat.Settings.arr)
+                    foreach (var list in arrRow)
+                        list.Clear();
+
+                // Предустановленные данные по станциям
+                foreach (var station in stations)
+                {
+                    station.oooinn ??= "ООО ИНН";
+                    station.fio ??= "ФИО";
+                    station.phone ??= "Телефон";
+                    station.dt ??= "Данные водителя";
+                    station.auto1 ??= "Марка машины";
+                    station.auto2 ??= "Номер машины";
+                    station.autoplomb ??= "";
+                    station.poluch ??= "г. Москва, вн. тер. г. муниципальный округ Черемушки, ул. Намёткина, д. 12А, помещ. XVII, ком. 9.";
+                }
+
+                int el = 0;
+                if (xroot != null)
+                {
+                    int i = -1;
+                    foreach (XmlElement xnode in xroot)
                     {
-                        listGetter(station).Add(value);
-                        continue;
+                        i++;
+                        if (i >= stations.Length) break;
+
+                        var station = stations[i];
+
+                        foreach (XmlNode childnode in xnode.ChildNodes)
+                        {
+                            string name = childnode.Name;
+                            string value = childnode.InnerText;
+
+                            // Обновление списка
+                            if (new[] { "pal", "gm", "mesh", "cont", "save", "zas" }.Contains(name))
+                            {
+                                AddXmlElement(value, name, i);
+                                el++;
+                            }
+
+                            // Обновление свойств станции
+                            switch (name)
+                            {
+                                case "oooinn": station.oooinn = value; break;
+                                case "fio": station.fio = value; break;
+                                case "march": station.march = value; break;
+                                case "phone": station.phone = value; break;
+                                case "dt": station.dt = value; break;
+                                case "auto1": station.auto1 = value; break;
+                                case "auto2": station.auto2 = value; break;
+                                case "autoplomb": station.autoplomb = value; break;
+                            }
+                        }
                     }
                 }
+
+                new ToastContentBuilder()
+                    .AddArgument("action", "viewConversation")
+                    .AddArgument("conversationId", 9813)
+                    .AddText("Данные успешно импортированы.")
+                    .AddText($"Импортирование данных из файла {new Home().GetNameFile(Properties.Settings.Default.savePathFileDir)}.xml завершена без ошибок. Всего загружено {el} элементов таблиц.")
+                    .AddButton(new ToastButton().SetContent("OK"))
+                    .Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
+
 
         static private void AddXmlElement(string str, string element, int i)
         {
