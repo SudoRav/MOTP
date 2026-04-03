@@ -1,0 +1,736 @@
+using System.Collections.Generic;
+using System;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Text;
+using System.Linq;
+using System.Net;
+using System.Text.RegularExpressions;
+using Microsoft.Win32;
+using System.IO;
+using System.Windows.Media.Imaging;
+using Spire.Xls;
+
+namespace MOTP.View
+{
+    public partial class Home : UserControl
+    {
+        public Home()
+        {
+            InitializeComponent();
+        }
+
+        private void CB_Autoweb_Loaded(object sender, RoutedEventArgs e)
+        {
+            CB_Autoweb.IsChecked = Properties.Settings.Default.autoweb;
+        }
+
+        private void CB_AddDubl_Loaded(object sender, RoutedEventArgs e)
+        {
+            CB_AddDubl.IsChecked = Properties.Settings.Default.adddubl;
+        }
+
+        private void CB_Autoweb_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.autoweb = CB_Autoweb.IsChecked.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void CB_AddDubl_Click(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.adddubl = CB_AddDubl.IsChecked.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        public bool FormStr(string input, int index, bool enderPlmb)
+        {
+            bool result = false;
+            switch(index)
+            {
+                case 0: result = RegInp(input, Properties.Settings.Default.PPpal,  Properties.Settings.Default.patternNaclPal,  Properties.Settings.Default.patternPlmbPal,  enderPlmb);  break;
+                case 1: result = RegInp(input, Properties.Settings.Default.PPgm,   Properties.Settings.Default.patternNaclGM,   Properties.Settings.Default.patternPlmbGM,   enderPlmb);   break;
+                case 2: result = RegInp(input, Properties.Settings.Default.PPmesh, Properties.Settings.Default.patternNaclMesh, Properties.Settings.Default.patternPlmbMesh, enderPlmb); break;
+                case 3: result = RegInp(input, Properties.Settings.Default.PPcont, Properties.Settings.Default.patternNaclCont, Properties.Settings.Default.patternPlmbCont, enderPlmb); break;
+                case 4: result = RegInp(input, Properties.Settings.Default.PPsave, Properties.Settings.Default.patternNaclSave, Properties.Settings.Default.patternPlmbSave, enderPlmb); break;
+                case 5: result = RegInp(input, Properties.Settings.Default.PPzas,  Properties.Settings.Default.patternNaclZas,  Properties.Settings.Default.patternPlmbZas,  enderPlmb);  break;
+            }
+            return result;
+        }
+        private bool RegInp(string input, bool PP, string patternNacl, string patternPlmb, bool enterPlmb)
+        {
+            if (PP)
+            {
+                if (!enterPlmb)
+                {
+                    if (patternNacl == "")
+                        return true;
+
+                    Regex reg = new Regex(patternNacl);
+                    if (reg.IsMatch(input))
+                        if (reg.IsMatch(input))
+                            return true;
+                    return false;
+                }
+                else
+                {
+                    if (patternPlmb == "")
+                        return true;
+
+                    Regex reg = new Regex(patternPlmb);
+                    if (reg.IsMatch(input))
+                        if (reg.IsMatch(input))
+                            return true;
+                    return false;
+                }
+            }
+            else
+            {
+                if (!enterPlmb)
+                {
+                    if (patternNacl == "")
+                        return true;
+
+                    Regex reg = new Regex(patternNacl);
+                    if (reg.IsMatch(input))
+                        return true;
+                    return false;
+                }
+                else
+                {
+                    if (patternPlmb == "")
+                        return true;
+
+                    Regex reg = new Regex(patternPlmb);
+                    if (reg.IsMatch(input))
+                        return true;
+                    return false;
+                }
+            }
+        }
+
+        public void AddProd(List<string> listPal, List<string> listGM, List<string> listMesh, List<string> listCont, List<string> listSave, List<string> listZas,
+                            List<string> stat, TextBox nacl, TextBox plmb, string prim, ListBox list = null)
+        {
+            if (FindDubl(listPal, listGM, listMesh, listCont, listSave, listZas, nacl.Text) || FindDubl(listPal, listGM, listMesh, listCont, listSave, listZas, plmb.Text))
+            {
+                stat.Add($"{prim} {Cyrillify(nacl.Text)} {Cyrillify(plmb.Text)}");
+                if (list != null)
+                    list.Items.Add($"{prim} {Cyrillify(nacl.Text)} {Cyrillify(plmb.Text)}");
+            }
+            else
+            {
+                //MessageBox.Show("Дубль");
+                System.Media.SystemSounds.Hand.Play();
+
+                if (Properties.Settings.Default.adddubl)
+                {
+                    stat.Add($"{prim} {Cyrillify(nacl.Text)} {Cyrillify(plmb.Text)}");
+                    if (list != null)
+                        list.Items.Add($"{prim} {Cyrillify(nacl.Text)} {Cyrillify(plmb.Text)}");
+                }
+            }
+            ClearEnter(nacl, plmb);
+
+            //ReloadDTInfo(ListPal, TBO_Pal, ListGM, TBO_GM, ListMesh, TBO_Mesh, ListCont, TBO_Cont);
+        }
+
+        public void SetCB(ComboBox CB, TextBox nacl, TextBox plmb)
+        {
+            switch(CB.SelectedIndex)
+            {
+                case 0: nacl.Text = ""; plmb.Text = ""; plmb.IsEnabled = false; nacl.Focus(); break;
+                case 1: nacl.Text = ""; plmb.Text = ""; plmb.IsEnabled = false; nacl.Focus(); break;
+                case 2: nacl.Text = ""; plmb.Text = ""; plmb.IsEnabled = true;  nacl.Focus(); break;
+                case 3: nacl.Text = ""; plmb.Text = ""; plmb.IsEnabled = true;  nacl.Focus(); break;
+                case 4: nacl.Text = ""; plmb.Text = ""; plmb.IsEnabled = false; nacl.Focus(); break;
+                case 5: nacl.Text = ""; plmb.Text = ""; plmb.IsEnabled = false; nacl.Focus(); break;
+            }
+        }
+
+        private static string Cyrillify(string s)
+        {
+            var sb = new StringBuilder(s);
+            foreach (var kvp in Replacements)
+                sb.Replace(kvp.Key, kvp.Value);
+            return sb.ToString();
+        }
+
+        static Dictionary<char, char> Replacements = new Dictionary<char, char>()
+        {
+            ['№'] = '#',
+            ['й'] = 'q',
+            ['ц'] = 'w',
+            ['у'] = 'e',
+            ['к'] = 'r',
+            ['е'] = 't',
+            ['н'] = 'y',
+            ['г'] = 'u',
+            ['ш'] = 'i',
+            ['щ'] = 'o',
+            ['з'] = 'p',
+            ['х'] = '[',
+            ['ъ'] = ']',
+            ['ф'] = 'a',
+            ['ы'] = 's',
+            ['в'] = 'd',
+            ['а'] = 'f',
+            ['п'] = 'g',
+            ['р'] = 'h',
+            ['о'] = 'j',
+            ['л'] = 'k',
+            ['д'] = 'l',
+            ['ж'] = ';',
+            ['э'] = '\'',
+            ['я'] = 'z',
+            ['ч'] = 'x',
+            ['с'] = 'c',
+            ['м'] = 'v',
+            ['и'] = 'b',
+            ['т'] = 'n',
+            ['ь'] = 'm',
+            ['б'] = ',',
+            ['ю'] = '.',
+            ['Й'] = 'Q',
+            ['Ц'] = 'W',
+            ['У'] = 'E',
+            ['К'] = 'R',
+            ['Е'] = 'T',
+            ['Н'] = 'Y',
+            ['Г'] = 'U',
+            ['Ш'] = 'I',
+            ['Щ'] = 'O',
+            ['З'] = 'P',
+            ['Х'] = '[',
+            ['Ъ'] = ']',
+            ['Ф'] = 'A',
+            ['Ы'] = 'S',
+            ['В'] = 'D',
+            ['А'] = 'F',
+            ['П'] = 'G',
+            ['Р'] = 'H',
+            ['О'] = 'J',
+            ['Л'] = 'K',
+            ['Д'] = 'L',
+            ['Ж'] = ';',
+            ['Э'] = '\'',
+            ['Я'] = 'Z',
+            ['Ч'] = 'X',
+            ['С'] = 'C',
+            ['М'] = 'V',
+            ['И'] = 'B',
+            ['Т'] = 'N',
+            ['Ь'] = 'M',
+            ['Б'] = ',',
+            ['Ю'] = '.',
+        };
+
+        public void ClearEnter(TextBox nacl, TextBox plmb)
+        {
+            nacl.Text = "";
+            plmb.Text = "";
+
+            nacl.Focus();
+        }
+
+        private bool FindDubl(List<string> listPal, List<string> listGM, List<string> listMesh, List<string> listCont, List<string> listSave, List<string> listZas,
+                              string findstr)
+        {
+            foreach (string str in listPal)
+            {
+                if (str.ToUpper().Contains(findstr.ToUpper()))
+                    return false;
+            }
+
+            foreach (string str in listGM)
+            {
+                if (str.ToUpper().Contains(findstr.ToUpper()))
+                    return false;
+            }
+
+            foreach (string str in listMesh)
+            {
+                if (str.ToUpper().Contains(findstr.ToUpper()))
+                    return false;
+            }
+
+            foreach (string str in listCont)
+            {
+                if (str.ToUpper().Contains(findstr.ToUpper()))
+                    return false;
+            }
+
+            foreach (string str in listSave)
+            {
+                if (str.ToUpper().Contains(findstr.ToUpper()))
+                    return false;
+            }
+
+            foreach (string str in listZas)
+            {
+                if (str.ToUpper().Contains(findstr.ToUpper()))
+                    return false;
+            }
+
+            return true;
+        }
+
+        public string tmpstr = "";
+        public string tmpval = "";
+        public string tmpprm = "";
+        public string tmpcnt = "0";
+        public ListBox tmpsnd;
+        public List<string> tmpstt;
+        public void ListSelectionWeb(ListBox sender, List<string> stt, bool useplomb)
+        {
+            if (sender.SelectedIndex == -1)
+                return;
+
+            try
+            {
+                string[] splstr1 = sender.SelectedValue.ToString().Trim().Split(' ', '_');
+                string[] splstr2 = sender.SelectedValue.ToString().Trim().Split(' ');
+
+                if (!useplomb)
+                { tmpval = splstr2[1]; }
+                else
+                { tmpval = $"{splstr2[1]} {splstr2[2]}"; }
+
+                    try
+                    {
+                        if (!useplomb)
+                        { tmpcnt = splstr2[2]; }
+                        else
+                        { tmpcnt = splstr2[3]; }
+                    } catch { tmpcnt = "0"; }
+
+                tmpsnd = sender;
+                tmpstt = stt;
+                tmpprm = splstr2[0];
+
+                if (Properties.Settings.Default.autoweb)
+                    Process.Start(new ProcessStartInfo($"https://{splstr1[1]}.zappstore.pro/pallet/{splstr2[1]}") { UseShellExecute = true });
+
+                Details detail = new Details(this);
+                detail.Show();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+        public void OpenDop(List<string> listSave, List<string> listZas)
+        {
+            Dop dop = new Dop(this, listSave, listZas);
+            dop.Show();
+        }
+        public void OpenSett(int numstatiom)
+        {
+            Sett sett = new Sett(this, numstatiom);
+            sett.Show();
+        }
+
+        public void ReloadDTInfo(ListBox list1 = null, TextBlock tbo1 = null,
+                                 ListBox list2 = null, TextBlock tbo2 = null,
+                                 ListBox list3 = null, TextBlock tbo3 = null,
+                                 ListBox list4 = null, TextBlock tbo4 = null,
+                                 ListBox list5 = null, TextBlock tbo5 = null,
+                                 ListBox list6 = null, TextBlock tbo6 = null)
+        {
+            if (list1 != null)
+            {
+                string[] tmp1 = tbo1.Text.Split('/');
+                tbo1.Text = $"{list1.Items.Count} /{tmp1[1]}";
+            }
+
+            if (list2 != null)
+            {
+                string[] tmp2 = tbo2.Text.Split('/');
+                tbo2.Text = $"{list2.Items.Count} /{tmp2[1]}";
+            }
+
+            if (list3 != null)
+            {
+                string[] tmp3 = tbo3.Text.Split('/');
+                tbo3.Text = $"{list3.Items.Count} /{tmp3[1]}";
+            }
+
+            if (list4 != null)
+            {
+                string[] tmp4 = tbo4.Text.Split('/');
+                tbo4.Text = $"{list4.Items.Count} /{tmp4[1]}";
+            }
+
+            if (list5 != null)
+            {
+                string[] tmp5 = tbo5.Text.Split('/');
+                tbo5.Text = $"{list5.Items.Count} /{tmp5[1]}";
+            }
+            if (list6 != null)
+            {
+                string[] tmp6 = tbo6.Text.Split('/');
+                tbo6.Text = $"{list6.Items.Count} /{tmp6[1]}";
+            }
+        }
+
+        private string richreport = "";
+        public void FormOtch(List<string> listPal, List<string> listGM, List<string> listMesh, List<string> listCont, List<string> listSave, List<string> listZas,
+                             string march2, string automlomb, 
+                             RichTextBox oooinn, RichTextBox march1, RichTextBox dt, string auto1, string auto2)
+        {
+            richreport = "";
+
+            richreport += march2;
+            richreport += "\n\n";
+
+            richreport += "Паллеты:\n";
+            for (int i = 0; i < listPal.Count; i++)
+            {
+                string[] str = listPal[i].Split(new char[] { ' ' });
+                richreport += $"{str[1]} {str[2]}\n";
+            }
+            richreport += "\n\n";
+
+            richreport += "ГМы:\n";
+            for (int i = 0; i < listGM.Count; i++)
+            {
+                string[] str = listGM[i].Split(new char[] { ' ' });
+                richreport += $"{str[1]} {str[2]}\n";
+            }
+            richreport += "\n\n";
+
+            richreport += "Мешки:\n";
+            for (int i = 0; i < listMesh.Count; i++)
+            {
+                string[] str = listMesh[i].Split(new char[] { ' ' });
+                try { richreport += $"{str[1]} {str[2]} {str[3]}\n"; }
+                catch { richreport += $"{str[1]} {str[2]}\n"; }
+            }
+            richreport += "\n\n";
+
+            richreport += "Контейнеры:\n";
+            for (int i = 0; i < listCont.Count; i++)
+            {
+                string[] str = listCont[i].Split(new char[] { ' ' });
+                try { richreport += $"{str[1]} {str[2]} {str[3]}\n"; }
+                catch { richreport += $"{str[1]} {str[2]}\n"; }
+            }
+            richreport += "\n\n";
+
+            richreport += "Сейфпакеты:\n";
+            for (int i = 0; i < listSave.Count; i++)
+            {
+                string[] str = listSave[i].Split(new char[] { ' ' });
+                try { richreport += $"{str[1]} {str[2]} {str[3]}\n"; }
+                catch { richreport += $"{str[1]} {str[2]}\n"; }
+            }
+            richreport += "\n\n";
+
+            richreport += "Засылы:\n";
+            for (int i = 0; i < listZas.Count; i++)
+            {
+                string[] str = listZas[i].Split(new char[] { ' ' });
+                try { richreport += $"{str[1]} {str[2]} {str[3]}\n"; }
+                catch { richreport += $"{str[1]} {str[2]}\n"; }
+            }
+            richreport += "\n\n";
+
+            richreport += "Пломба:\n";
+            richreport += automlomb;
+            richreport += "\n\n";
+
+            richreport += "\n\n";
+
+            richreport += new TextRange(oooinn.Document.ContentStart, oooinn.Document.ContentEnd).Text;
+            richreport += "\n";
+            richreport += new TextRange(march1.Document.ContentStart, march1.Document.ContentEnd).Text;
+            richreport += "\n";
+            richreport += new TextRange(dt.Document.ContentStart, dt.Document.ContentEnd).Text;
+            richreport += "\n";
+            richreport += $"{auto1} {auto2}";
+            richreport += "\n";
+
+            Report report = new Report(this, richreport);
+            report.Show();
+        }
+        public void FormDoc(List<string> listPal, List<string> listGM, List<string> listMesh, List<string> listCont, List<string> listSave, List<string> listZas,
+                            RichTextBox RTBoooinn, TextBox TB_FIO, RichTextBox RTBMarch, TextBox TB_Phone, RichTextBox RTBdt, TextBox TB_Auto1, TextBox TB_Auto2,
+                            string statsdach, string statpoluch)
+        {
+            string warningline = "";
+
+            if(listPal.Count == 0)
+                warningline += "• Список паллетов пуст\n";
+
+            if (listGM.Count == 0)
+                warningline += "• Список ГМов пуст\n";
+
+            if (listMesh.Count == 0)
+                warningline += "• Список машков пуст\n";
+
+            if (listCont.Count == 0)
+                warningline += "• Список контейнеров пуст\n";
+
+            if (listSave.Count == 0)
+                warningline += "• Список сейфпакетов пуст\n";
+
+            if (listZas.Count == 0)
+                warningline += "• Список засылов пуст\n";
+
+            if (new TextRange(RTBoooinn.Document.ContentStart, RTBoooinn.Document.ContentEnd).Text == "ООО ИНН")
+                warningline += "• Не указан ООО ИНН\n";
+
+            if(TB_FIO.Text == "ФИО")
+                warningline += "• Не указано ФИО\n";
+
+            if (new TextRange(RTBMarch.Document.ContentStart, RTBMarch.Document.ContentEnd).Text == "Маршрут")
+                warningline += "• Не указан Маршрут\n";
+
+            if (TB_Phone.Text == "Телефон")
+                warningline += "• Не указан Телефон\n";
+
+            if (new TextRange(RTBdt.Document.ContentStart, RTBdt.Document.ContentEnd).Text == "Данные водителя")
+                warningline += "• Не указаны Данные водителя\n";
+
+            if (TB_Auto1.Text == "Марка машины")
+                warningline += "• Не указана Марка машины\n";
+
+            if (TB_Auto2.Text == "Номер машины")
+                warningline += "• Не указан Номер машины\n";
+
+            if (MessageBox.Show(warningline, "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                Workbook workbook = new Workbook();
+
+                Worksheet worksheet = workbook.Worksheets[0];
+            }
+        }
+
+        public void ClrList(ListBox list, List<string> _list)
+        {
+            if (MessageBox.Show("Очистить содержимое списка?", "Внимание!", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                list.Items.Clear();
+                _list.Clear();
+            }
+        }
+
+        public bool SetType(KeyEventArgs e, string TB, ComboBox CB)
+        {
+            if (e.Key == Key.Enter)
+            {
+                switch(TB)
+                {
+                    case "##pal":  CB.SelectedIndex = 0; return true;
+                    case "##gm":   CB.SelectedIndex = 1; return true;
+                    case "##mesh": CB.SelectedIndex = 2; return true;
+                    case "##cont": CB.SelectedIndex = 3; return true;
+                    case "##save": CB.SelectedIndex = 4; return true;
+                    case "##zas":  CB.SelectedIndex = 5; return true;
+                }
+            }
+            return false;
+        }
+
+        private void RichTextBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            //WebClient wc = new WebClient();
+            //string webline = wc.DownloadString($"https://hub-14.zappstore.pro/pallet/HUB-14_L37717");
+
+
+            //FlowDocument document = new FlowDocument();
+            //Paragraph paragraph = new Paragraph();
+            //paragraph.Inlines.Add(new Bold(new Run(webline)));
+            //document.Blocks.Add(paragraph);
+            //dtl.Document = document;
+        }
+
+        private void TB_PattenNaclPal_Loaded(object sender, RoutedEventArgs e)
+        {
+            TB_PattenNaclPal.Text = Properties.Settings.Default.patternNaclPal;
+        }
+        private void TB_PattenPlmbPal_Loaded(object sender, RoutedEventArgs e)
+        {
+            TB_PattenPlmbPal.Text = Properties.Settings.Default.patternPlmbPal;
+        }
+        private void TB_PattenNaclGM_Loaded(object sender, RoutedEventArgs e)
+        {
+            TB_PattenNaclGM.Text = Properties.Settings.Default.patternNaclGM;
+        }
+        private void TB_PattenPlmbGM_Loaded(object sender, RoutedEventArgs e)
+        {
+            TB_PattenPlmbGM.Text = Properties.Settings.Default.patternPlmbGM;
+        }
+        private void TB_PattenNaclMesh_Loaded(object sender, RoutedEventArgs e)
+        {
+            TB_PattenNaclMesh.Text = Properties.Settings.Default.patternNaclMesh;
+        }
+        private void TB_PattenPlmbMesh_Loaded(object sender, RoutedEventArgs e)
+        {
+            TB_PattenPlmbMesh.Text = Properties.Settings.Default.patternPlmbMesh;
+        }
+        private void TB_PattenNaclCont_Loaded(object sender, RoutedEventArgs e)
+        {
+            TB_PattenNaclCont.Text = Properties.Settings.Default.patternNaclCont;
+        }
+        private void TB_PattenPlmbCont_Loaded(object sender, RoutedEventArgs e)
+        {
+            TB_PattenPlmbCont.Text = Properties.Settings.Default.patternPlmbCont;
+        }
+        private void TB_PattenNaclSave_Loaded(object sender, RoutedEventArgs e)
+        {
+            TB_PattenNaclSave.Text = Properties.Settings.Default.patternNaclSave;
+        }
+        private void TB_PattenPlmbSave_Loaded(object sender, RoutedEventArgs e)
+        {
+            TB_PattenPlmbSave.Text = Properties.Settings.Default.patternPlmbSave;
+        }
+        private void TB_PattenNaclZas_Loaded(object sender, RoutedEventArgs e)
+        {
+            TB_PattenNaclZas.Text = Properties.Settings.Default.patternNaclZas;
+        }
+        private void TB_PattenPlmbZas_Loaded(object sender, RoutedEventArgs e)
+        {
+            TB_PattenPlmbZas.Text = Properties.Settings.Default.patternPlmbZas;
+        }
+        private void TB_PattenNaclPal_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.patternNaclPal = TB_PattenNaclPal.Text;
+            Properties.Settings.Default.Save();
+        }
+        private void TB_PattenPlmbPal_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.patternPlmbPal = TB_PattenPlmbPal.Text;
+            Properties.Settings.Default.Save();
+        }
+        private void TB_PattenNaclGM_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.patternNaclGM = TB_PattenNaclGM.Text;
+            Properties.Settings.Default.Save();
+        }
+        private void TB_PattenPlmbGM_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.patternPlmbGM = TB_PattenPlmbGM.Text;
+            Properties.Settings.Default.Save();
+        }
+        private void TB_PattenNaclMesh_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.patternNaclMesh = TB_PattenNaclMesh.Text;
+            Properties.Settings.Default.Save();
+        }
+        private void TB_PattenPlmbMesh_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.patternPlmbMesh = TB_PattenPlmbMesh.Text;
+            Properties.Settings.Default.Save();
+        }
+        private void TB_PattenNaclCont_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.patternNaclCont = TB_PattenNaclCont.Text;
+            Properties.Settings.Default.Save();
+        }
+        private void TB_PattenPlmbCont_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.patternPlmbCont = TB_PattenPlmbCont.Text;
+            Properties.Settings.Default.Save();
+        }
+        private void TB_PattenNaclSave_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.patternNaclSave = TB_PattenNaclSave.Text;
+            Properties.Settings.Default.Save();
+        }
+        private void TB_PattenPlmbSave_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.patternPlmbSave = TB_PattenPlmbSave.Text;
+            Properties.Settings.Default.Save();
+        }
+        private void TB_PattenNaclZas_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.patternNaclZas = TB_PattenNaclZas.Text;
+            Properties.Settings.Default.Save();
+        }
+        private void TB_PattenPlmbZas_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.patternPlmbZas = TB_PattenPlmbZas.Text;
+            Properties.Settings.Default.Save();
+        }
+        private void CB_PPPal_Loaded(object sender, RoutedEventArgs e)
+        {
+            CB_PPPal.IsChecked = Properties.Settings.Default.PPpal;
+        }
+        private void CB_PPPal_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.PPpal = CB_PPPal.IsChecked.Value;
+            Properties.Settings.Default.Save();
+        }
+        private void CB_PPGM_Loaded(object sender, RoutedEventArgs e)
+        {
+            CB_PPGM.IsChecked = Properties.Settings.Default.PPgm;
+        }
+        private void CB_PPGM_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.PPgm = CB_PPGM.IsChecked.Value;
+            Properties.Settings.Default.Save();
+        }
+        private void CB_PPMesh_Loaded(object sender, RoutedEventArgs e)
+        {
+            CB_PPMesh.IsChecked = Properties.Settings.Default.PPmesh;
+        }
+        private void CB_PPMesh_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.PPmesh = CB_PPMesh.IsChecked.Value;
+            Properties.Settings.Default.Save();
+        }
+        private void CB_PPCont_Loaded(object sender, RoutedEventArgs e)
+        {
+            CB_PPCont.IsChecked = Properties.Settings.Default.PPcont;
+        }
+        private void CB_PPCont_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.PPcont = CB_PPCont.IsChecked.Value;
+            Properties.Settings.Default.Save();
+        }
+        private void CB_PPSave_Loaded(object sender, RoutedEventArgs e)
+        {
+            CB_PPSave.IsChecked = Properties.Settings.Default.PPsave;
+        }
+        private void CB_PPSave_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.PPsave = CB_PPSave.IsChecked.Value;
+            Properties.Settings.Default.Save();
+        }
+        private void CB_PPZas_Loaded(object sender, RoutedEventArgs e)
+        {
+            CB_PPZas.IsChecked = Properties.Settings.Default.PPzas;
+        }
+        private void CB_PPZas_LostFocus(object sender, RoutedEventArgs e)
+        {
+            Properties.Settings.Default.PPzas = CB_PPZas.IsChecked.Value;
+            Properties.Settings.Default.Save();
+        }
+
+        private void BTN_DownloadImg_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Title = "Сохранить изображение как...";
+            dialog.OverwritePrompt = true;
+            dialog.CheckPathExists = true;
+            dialog.Filter = "Image Files(*.png)|*.png";
+
+            if (dialog.ShowDialog() == true)
+            {
+                try
+                {
+                    var encoder = new PngBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create((BitmapSource)IMG_Types.Source));
+                    using (FileStream stream = new FileStream(dialog.FileName, FileMode.Create))
+                        encoder.Save(stream);
+                }
+                catch { }
+            }
+        }
+    }
+}

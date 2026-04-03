@@ -1,0 +1,90 @@
+﻿<Window x:Class="MOTP.View.Patterns"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:MOTP.ViewModel"
+        xmlns:Menu="clr-namespace:MOTP.Utilities"
+        mc:Ignorable="d"
+        Title="Паттерны"
+        Height="400"
+        Width="1000"
+        WindowStartupLocation="CenterScreen"
+        Background="#212529" Closing="Window_Closing">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="44"/>
+            <RowDefinition/>
+            <RowDefinition Height="44"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <DataGrid Style="{StaticResource DataGridApp}" x:Name="PatsNac" Grid.Row="1" ItemsSource="{Binding PatNacs}" SelectedItem="{Binding SelectedElement}" AutoGenerateColumns="False" Margin="10,0,10,0" FontSize="14" Foreground="Black" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Паттерн" MinWidth="10" Width="*" Binding="{Binding PatName}"/>
+                <DataGridCheckBoxColumn Header="Pal" MinWidth="5" Width="auto" Binding="{Binding ActPal}"/>
+                <DataGridCheckBoxColumn Header="GM" MinWidth="5" Width="auto" Binding="{Binding ActGM}"/>
+                <DataGridCheckBoxColumn Header="Mesh" MinWidth="5" Width="auto" Binding="{Binding ActMesh}"/>
+                <DataGridCheckBoxColumn Header="Cont" MinWidth="5" Width="auto" Binding="{Binding ActCont}"/>
+                <DataGridCheckBoxColumn Header="Save" MinWidth="5" Width="auto" Binding="{Binding ActSave}"/>
+                <DataGridCheckBoxColumn Header="Zas" MinWidth="5" Width="auto" Binding="{Binding ActZas}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <DataGrid Style="{StaticResource DataGridApp}" x:Name="PatsPlb" Grid.Row="1" ItemsSource="{Binding PatPlbs}" SelectedItem="{Binding SelectedElement}" AutoGenerateColumns="False" Grid.Column="1" Margin="10,0,10,0" BorderBrush="#FF0081FF" FontSize="14" Foreground="Black">
+            <DataGrid.Columns >
+                <DataGridTextColumn Header="Паттерн" MinWidth="10" Width="*" Binding="{Binding PatName}"/>
+                <DataGridCheckBoxColumn Header="Pal" MinWidth="5" Width="auto" Binding="{Binding ActPal}"/>
+                <DataGridCheckBoxColumn Header="GM" MinWidth="5" Width="auto" Binding="{Binding ActGM}"/>
+                <DataGridCheckBoxColumn Header="Mesh" MinWidth="5" Width="auto" Binding="{Binding ActMesh}"/>
+                <DataGridCheckBoxColumn Header="Cont" MinWidth="5" Width="auto" Binding="{Binding ActCont}"/>
+                <DataGridCheckBoxColumn Header="Save" MinWidth="5" Width="auto" Binding="{Binding ActSave}"/>
+                <DataGridCheckBoxColumn Header="Zas" MinWidth="5" Width="auto" Binding="{Binding ActZas}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Button x:Name="BTN_RemNac"
+            Style="{StaticResource BtnApp}"
+            FontSize="22"
+            Content="-" 
+            Width="NaN"
+            HorizontalAlignment="Stretch" 
+            Height="30" 
+            Margin="250,0,10,0"
+            Grid.Row="2" VerticalAlignment="Center" Click="BTN_RemNac_Click" />
+
+        <Button x:Name="BTN_RemPlb"
+            Style="{StaticResource BtnApp}"
+            FontSize="22"
+            Content="-" 
+            Width="NaN"
+            HorizontalAlignment="Stretch" 
+            Height="30" 
+            Margin="250,0,10,0"
+            Grid.Row="2" VerticalAlignment="Center" Grid.Column="1" Click="BTN_RemPlb_Click" />
+
+        <TextBlock 
+            Text="Паттерны наклеек:"
+            Foreground="#DBDBDB"
+            FontSize="20"
+            VerticalAlignment="Center"
+            FontFamily="/Fonts/#Rubik Medium" 
+            Height="30" Width="480" 
+            HorizontalAlignment="Left" Margin="10,0,0,0" />
+        <TextBlock 
+            Text="Паттерны пломб:"
+            Foreground="#DBDBDB"
+            FontSize="20"
+            VerticalAlignment="Center"
+            FontFamily="/Fonts/#Rubik Medium" 
+            Height="30" Width="480" 
+            HorizontalAlignment="Left" Grid.Column="1" Margin="10,0,0,0" />
+
+    </Grid>
+
+</Window>
