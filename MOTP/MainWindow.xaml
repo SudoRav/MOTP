@@ -23,14 +23,10 @@
             <RowDefinition Height="45*"/>
         </Grid.RowDefinitions>
 
-        <!--// Window Border //-->
-
         <Border Background="#212529"
                 CornerRadius="20" Grid.RowSpan="2" />
 
         <Grid Grid.RowSpan="2">
-
-            <!--// Base Grid //-->
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="228"/>
@@ -49,8 +45,6 @@
 
                     <StackPanel VerticalAlignment="Center" Width="228">
 
-                        <!--// Home //-->
-
                         <Menu:Btn Style="{StaticResource BtnStyle}"
                               Command="{Binding HomeCommand}"
                               IsChecked="True">
@@ -67,8 +61,6 @@
 
                         </Menu:Btn>
 
-                        <!--//-->
-
                         <Menu:Btn Style="{StaticResource BtnStyle}"
                               Command="{Binding HimkiCommand}">
 
@@ -83,8 +75,6 @@
                             </Grid>
 
                         </Menu:Btn>
-
-                        <!--//-->
 
                         <Menu:Btn Style="{StaticResource BtnStyle}"
                               Command="{Binding MartaCommand}">
@@ -101,8 +91,6 @@
 
                         </Menu:Btn>
 
-                        <!--//-->
-
                         <Menu:Btn Style="{StaticResource BtnStyle}"
                               Command="{Binding PuhkinoCommand}">
 
@@ -117,8 +105,6 @@
                             </Grid>
 
                         </Menu:Btn>
-
-                        <!--//-->
 
                         <Menu:Btn Style="{StaticResource BtnStyle}"
                               Command="{Binding PrivolnayCommand}">
@@ -135,8 +121,6 @@
 
                         </Menu:Btn>
 
-                        <!--//-->
-
                         <Menu:Btn Style="{StaticResource BtnStyle}"
                               Command="{Binding VehkiCommand}">
 
@@ -151,8 +135,6 @@
                             </Grid>
 
                         </Menu:Btn>
-
-                        <!--//-->
 
                         <Menu:Btn Style="{StaticResource BtnStyle}"
                               Command="{Binding RybinovayCommand}">
@@ -169,8 +151,6 @@
 
                         </Menu:Btn>
 
-                        <!--//-->
-
                         <Menu:Btn Style="{StaticResource BtnStyle}"
                               Command="{Binding SharapovoCommand}">
 
@@ -185,8 +165,6 @@
                             </Grid>
 
                         </Menu:Btn>
-
-                        <!--//-->
 
                         <Menu:Btn Style="{StaticResource BtnStyle}"
                               Command="{Binding HelkovskayCommand}">
@@ -203,8 +181,6 @@
 
                         </Menu:Btn>
 
-                        <!--//-->
-
                         <Menu:Btn Style="{StaticResource BtnStyle}"
                               Command="{Binding OdincovoCommand}">
 
@@ -219,8 +195,6 @@
                             </Grid>
 
                         </Menu:Btn>
-
-                        <!--//-->
 
                         <Menu:Btn Style="{StaticResource BtnStyle}"
                               Command="{Binding SkladohnayCommand}">
@@ -237,8 +211,6 @@
 
                         </Menu:Btn>
 
-                        <!--//-->
-
                         <Menu:Btn Style="{StaticResource BtnStyle}"
                               Command="{Binding PerervaCommand}">
 
@@ -254,8 +226,6 @@
 
                         </Menu:Btn>
 
-                        <!--//-->
-
                         <Menu:Btn Style="{StaticResource BtnStyle}"
                               Command="{Binding BUhunskayCommand}">
 
@@ -270,8 +240,6 @@
                             </Grid>
 
                         </Menu:Btn>
-
-                        <!--//-->
 
                         <Menu:Btn Style="{StaticResource BtnStyle}"
                               Command="{Binding EgorevskCommand}">

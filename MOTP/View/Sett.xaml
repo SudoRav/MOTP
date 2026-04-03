@@ -20,8 +20,7 @@
             <RowDefinition/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-
-        <!-- RichTextBoxes -->
+        
         <RichTextBox x:Name="RTB_Sdach"
                      Style="{DynamicResource RichTextBoxApp}"
                      Grid.Row="1"
@@ -62,7 +61,6 @@
             </FlowDocument>
         </RichTextBox>
 
-        <!-- Buttons -->
         <Button Style="{StaticResource BtnApp}"
                 Content="Стереть внесённые данные станции"
                 Margin="10,0,0,0"
@@ -73,7 +71,6 @@
                 VerticalAlignment="Center"
                 Click="Button_Click"/>
 
-        <!-- TextBlocks -->
         <TextBlock Text="Адрес сдачи груза:"
                    Foreground="#DBDBDB"
                    FontSize="20"

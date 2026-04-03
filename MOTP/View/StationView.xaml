@@ -29,7 +29,6 @@
             <ColumnDefinition Width="30"/>
         </Grid.ColumnDefinitions>
 
-        <!-- Buttons -->
         <Button x:Name="BTN_Form"
                 Click="BTN_Form_Click"
                 Command="{Binding OpenFormCommand}"
@@ -162,7 +161,6 @@
                 VerticalAlignment="Center"
                 Margin="0,0,10,0"/>
 
-        <!-- ListBoxes -->
         <ListBox x:Name="ListPal"
                  ItemsSource="{Binding PalList}"
                  SelectedItem="{Binding SelectedListItem}"
@@ -203,7 +201,6 @@
                  Grid.Column="3"
                  Margin="10,0,10,10"/>
 
-        <!-- TextBoxes -->
         <TextBox x:Name="TBNacl" 
                  KeyDown="TBNacl_KeyDown"
                  Text="{Binding EntryText, UpdateSourceTrigger=PropertyChanged}"
@@ -288,7 +285,6 @@
                  FontSize="14"
                  VerticalAlignment="Top"/>
 
-        <!-- ComboBox -->
         <ComboBox x:Name="CBType"
                   ItemsSource="{Binding Types}"
                   SelectedIndex="{Binding SelectedTypeIndex}"
@@ -300,7 +296,6 @@
                   Margin="10,0,10,0">
         </ComboBox>
 
-        <!-- TextBlocks -->
         <TextBlock Text="Паллеты:"
                    Foreground="#DBDBDB"
                    FontSize="20"
@@ -388,7 +383,6 @@
                    Opacity="0.5"
                    TextAlignment="Right"/>
 
-        <!-- RichTextBoxes -->
         <RichTextBox x:Name="RTBoooinn"
                      Style="{DynamicResource RichTextBoxApp}"
                      Grid.Row="4"

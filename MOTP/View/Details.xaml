@@ -9,9 +9,7 @@
         Title="Детали"
         Height="200"
         Width="900"
-        
         Background="#212529" Closed="Window_Closed">
-    <!--WindowStartupLocation="CenterScreen"-->
 
     <Grid>
         <Grid.RowDefinitions>
