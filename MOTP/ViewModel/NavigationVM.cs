@@ -44,7 +44,6 @@ namespace MOTP.ViewModel
             BUhunskayCommand = new RelayCommand(_ => NavigateToBUhunskay());
             EgorevskCommand = new RelayCommand(_ => NavigateToEgorevsk());
 
-            // Startup Page
             CurrentView = new HomeVM();
         }
 

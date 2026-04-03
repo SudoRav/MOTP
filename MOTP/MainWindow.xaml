@@ -34,9 +34,7 @@
             </Grid.ColumnDefinitions>
 
             <ScrollViewer VerticalScrollBarVisibility="Auto" >
-
-                <!--// Navigation Panel //-->
-
+                
                 <Grid HorizontalAlignment="Left"
                   Width="228">
 

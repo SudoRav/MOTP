@@ -16,14 +16,12 @@ namespace MOTP.ViewModel
         public string StationName => Station?.march ?? "Неизвестно";
 
 
-        // Примитивные коллекции для привязки
         public ObservableCollection<string> PalList { get; } = new();
         public ObservableCollection<string> GMList { get; } = new();
         public ObservableCollection<string> MeshList { get; } = new();
         public ObservableCollection<string> ContList { get; } = new();
 
 
-        // Поля ввода
         private string _entryText;
         public string EntryText { get => _entryText; set { _entryText = value; OnPropertyChanged(); } }
 
@@ -39,7 +37,6 @@ namespace MOTP.ViewModel
         public object SelectedListItem { get; set; }
 
 
-        // Простые данные
         public string OOOINN { get => Station.oooinn; set { Station.oooinn = value; OnPropertyChanged(); } }
         public string FIO { get => Station.fio; set { Station.fio = value; OnPropertyChanged(); } }
         public string March { get => Station.march; set { Station.march = value; OnPropertyChanged(); } }
@@ -51,7 +48,6 @@ namespace MOTP.ViewModel
         public string Sdach { get => Station.sdach; set { Station.sdach = value; OnPropertyChanged(); } }
         public string Poluch { get => Station.poluch; set { Station.poluch = value; OnPropertyChanged(); } }
 
-        // Команды
         public ICommand AddCommand { get; }
         public ICommand RemoveCommand { get; }
         public ICommand OpenFormCommand { get; }
@@ -62,7 +58,6 @@ namespace MOTP.ViewModel
         {
             Station = station ?? throw new ArgumentNullException(nameof(station));
 
-            // Инициализация коллекций из underlying lists
             if (Station._listPal != null) foreach (var o in Station._listPal) PalList.Add(o);
             if (Station._listGM != null) foreach (var o in Station._listGM) GMList.Add(o);
             if (Station._listMesh != null) foreach (var o in Station._listMesh) MeshList.Add(o);
@@ -73,7 +68,6 @@ namespace MOTP.ViewModel
             RemoveCommand = new RelayCommand(_ => RemoveSelected());
 
 
-            // Заглушки (в проекте можно связать с Home.Instance или навигацией)
             //OpenFormCommand = new RelayCommand(_ => FormOtch());
             //GenerateReportCommand = new RelayCommand(_ => FormDoc());
             OpenSettingsCommand = new RelayCommand(_ => OpenSett());

@@ -3,9 +3,6 @@ using System.Collections.Generic;
 
 namespace Stat
 {
-    // -------------------------------------------------------------
-    // Глобальные настройки
-    // -------------------------------------------------------------
     public static class Settings
     {
         public static string Dol = "";
@@ -36,9 +33,6 @@ namespace Stat
         public static DateTime timeEnd = DateTime.MinValue;
     }
 
-    // -------------------------------------------------------------
-    // Обобщённая структура данных для всех станций
-    // -------------------------------------------------------------
     public class StationData
     {
         public int numstation;
@@ -64,9 +58,6 @@ namespace Stat
         public string ts = "";
     }
 
-    // -------------------------------------------------------------
-    // Универсальный шаблон станции
-    // -------------------------------------------------------------
     public static class StationTemplate
     {
         static void CopyLists(StationData source, StationData target)
@@ -95,9 +86,6 @@ namespace Stat
         }
     }
 
-    // -------------------------------------------------------------
-    // Определения всех станций
-    // -------------------------------------------------------------
     public static class Himki
     {
         public static StationData Data = new()

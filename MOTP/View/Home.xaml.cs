@@ -358,7 +358,6 @@ namespace MOTP.View
             if (string.IsNullOrEmpty(findstr))
                 return true;
 
-            // Проверка только текущих списков
             if (!multyfind)
             {
                 foreach (var list in currentLists)
@@ -367,7 +366,6 @@ namespace MOTP.View
                 return true;
             }
 
-            // Проверка по всем станциям через словарь
             var allStations = new List<List<List<string>>>()
     {
         new List<List<string>> { Stat.BUhunskay._listPal, Stat.BUhunskay._listGM, Stat.BUhunskay._listMesh, Stat.BUhunskay._listCont, Stat.BUhunskay._listSave, Stat.BUhunskay._listZas },
@@ -432,7 +430,7 @@ namespace MOTP.View
                 tmpprm = splstr2[0];
 
                 if (Properties.Settings.Default.autoweb)
-                    Process.Start(new ProcessStartInfo($"https://{splstr1[1]}.zappstore.pro/pallet/{splstr2[1]}") { UseShellExecute = true });
+                    Process.Start(new ProcessStartInfo($"https:-{splstr1[1]}.zappstore.pro/pallet/{splstr2[1]}") { UseShellExecute = true });
 
                 Details detail = new Details(this, tbo, stt, useplomb, numstation);
                 detail.ShowDialog();
@@ -1010,7 +1008,6 @@ namespace MOTP.View
                             sb.AppendLine($"    <{tags[j]}>{item.Trim()}</{tags[j]}>");
                     }
 
-                    // Получаем данные для конкретной станции через метод
                     sb.AppendLine(GetStationData(i));
 
                     sb.AppendLine("  </st>");
@@ -1044,7 +1041,6 @@ namespace MOTP.View
             }
         }
 
-        // Метод для получения данных DataDataInp для каждой станции
         static string GetStationData(int index)
         {
             return index switch
@@ -1115,7 +1111,6 @@ namespace MOTP.View
 
                 XmlElement xroot = xdoc.DocumentElement;
 
-                // Все станции в массив для циклической обработки
                 var stations = new[]
                 {
             Stat.Himki.Data, Stat.Marta.Data, Stat.Puhkino.Data, Stat.Privolnay.Data,
@@ -1123,12 +1118,10 @@ namespace MOTP.View
             Stat.Odincovo.Data, Stat.Skladohnay.Data, Stat.Pererva.Data, Stat.BUhunskay.Data, Stat.Egorevsk.Data
         };
 
-                // Очистка всех списков
                 foreach (var arrRow in Stat.Settings.arr)
                     foreach (var list in arrRow)
                         list.Clear();
 
-                // Предустановленные данные по станциям
                 foreach (var station in stations)
                 {
                     station.oooinn ??= "ООО ИНН";
@@ -1157,14 +1150,12 @@ namespace MOTP.View
                             string name = childnode.Name;
                             string value = childnode.InnerText;
 
-                            // Обновление списка
                             if (new[] { "pal", "gm", "mesh", "cont", "save", "zas" }.Contains(name))
                             {
                                 AddXmlElement(value, name, i);
                                 el++;
                             }
 
-                            // Обновление свойств станции
                             switch (name)
                             {
                                 case "oooinn": station.oooinn = value; break;
